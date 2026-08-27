@@ -1,10 +1,10 @@
 const ruleCards = [
-  { roman: 'I', tone: 'purple', icon: '✦', title: '무제한 소환 I', desc: '소환 제한이 사라집니다.' },
-  { roman: 'II', tone: 'red', icon: '●', title: '강화 적 출현 I', desc: '모든 적의 최대 체력이 15% 증가합니다.' },
-  { roman: 'III', tone: 'gold', icon: 'C', title: '시작 자금 증가 I', desc: '시작 크레딧이 150 증가합니다.' },
-  { roman: 'IV', tone: 'blue', icon: '▲', title: '공격 속도 증가 I', desc: '모든 아군의 공격 속도가 10% 증가합니다.' },
-  { roman: 'V', tone: 'green', icon: '+', title: '회복 효과 감소 I', desc: '적의 모든 회복 효과가 20% 감소합니다.' },
-  { roman: 'VI', tone: 'purple', icon: '◇', title: '카드 강화 확률 증가 I', desc: '카드 강화 성공 확률이 10% 증가합니다.' },
+  { roman: 'I', title: '무제한 소환 I', desc: '소환 제한이 사라집니다.' },
+  { roman: 'II', title: '강화 적 출현 I', desc: '모든 적의 최대 체력이 15% 증가합니다.' },
+  { roman: 'III', title: '시작 자금 증가 I', desc: '시작 크레딧이 150 증가합니다.' },
+  { roman: 'IV', title: '공격 속도 증가 I', desc: '모든 아군의 공격 속도가 10% 증가합니다.' },
+  { roman: 'V', title: '회복 효과 감소 I', desc: '적의 모든 회복 효과가 20% 감소합니다.' },
+  { roman: 'VI', title: '카드 강화 확률 증가 I', desc: '카드 강화 성공 확률이 10% 증가합니다.' },
 ]
 
 const enemies = [
@@ -27,11 +27,14 @@ const enemies = [
   { x: 9, y: 31, tone: 'orange' },
 ]
 
-function RuleCard({ roman, tone, icon, title, desc }: (typeof ruleCards)[number]) {
+function CreditToken() {
+  return <span className="credit-token" aria-hidden="true"><i /></span>
+}
+
+function RuleCard({ roman, title, desc }: (typeof ruleCards)[number]) {
   return (
-    <article className={`rule-card rule-card--${tone}`}>
+    <article className="rule-card">
       <span className="rule-card__roman">{roman}</span>
-      <div className="rule-card__icon">{icon}</div>
       <div className="rule-card__copy">
         <strong>{title}</strong>
         <p>{desc}</p>
@@ -46,10 +49,16 @@ function Battlefield() {
       <div className="track track--outer" />
       <div className="track track--inner" />
 
+      <div className="spawn-gate" aria-label="적 출현 지점">
+        <div className="spawn-gate__tunnel" />
+        <div className="spawn-gate__glow" />
+        <span>↑</span>
+      </div>
+
       <div className="track-arrows track-arrows--top">→ → → → →</div>
       <div className="track-arrows track-arrows--right">↓<br />↓<br />↓</div>
       <div className="track-arrows track-arrows--bottom">← ← ← ← ←</div>
-      <div className="track-arrows track-arrows--left">↑<br />↑<br />↑</div>
+      <div className="track-arrows track-arrows--left">↑<br />↑</div>
 
       <div className="placement-board">
         {Array.from({ length: 24 }, (_, index) => (
@@ -89,16 +98,13 @@ function App() {
 
         <div className="bottom-actions">
           <button className="summon-button">
-            <span className="summon-plus">＋</span>
-            <div className="summon-copy">
-              <strong>소환</strong>
-              <span><b>◎</b> 20</span>
-            </div>
+            <strong>소환</strong>
+            <span className="summon-cost"><CreditToken />20</span>
           </button>
 
           <div className="credit-box">
             <span>크레딧</span>
-            <strong><b>◈</b> 350</strong>
+            <strong><CreditToken />350</strong>
           </div>
         </div>
       </section>
