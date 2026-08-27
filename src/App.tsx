@@ -84,8 +84,8 @@ function App() {
     <main className="game-shell">
       <aside className="side-panel rule-history">
         <header className="panel-header">
-          <strong>획득한 규칙 카드</strong>
-          <span>RULE CARDS</span>
+          <strong>카드</strong>
+          <span>CARD</span>
         </header>
         <div className="rule-list">
           {ruleCards.map((rule) => <RuleCard key={rule.roman} {...rule} />)}
