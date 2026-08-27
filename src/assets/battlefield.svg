@@ -1,0 +1,135 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 820" role="img" aria-label="DefencER battlefield">
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#152330"/>
+      <stop offset="0.52" stop-color="#1b2b3b"/>
+      <stop offset="1" stop-color="#0d1721"/>
+    </linearGradient>
+    <linearGradient id="track" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#657286"/>
+      <stop offset="0.55" stop-color="#59677a"/>
+      <stop offset="1" stop-color="#4b586b"/>
+    </linearGradient>
+    <linearGradient id="platform" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#59687d"/>
+      <stop offset="1" stop-color="#465469"/>
+    </linearGradient>
+    <linearGradient id="slot" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#617086"/>
+      <stop offset="1" stop-color="#4e5d72"/>
+    </linearGradient>
+    <linearGradient id="gate" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#172734"/>
+      <stop offset="1" stop-color="#071018"/>
+    </linearGradient>
+    <pattern id="grid" width="54" height="54" patternUnits="userSpaceOnUse">
+      <path d="M54 0H0V54" fill="none" stroke="#89a1b5" stroke-opacity=".055" stroke-width="1"/>
+      <path d="M0 54L54 0" fill="none" stroke="#89a1b5" stroke-opacity=".04" stroke-width="1"/>
+    </pattern>
+    <pattern id="hazard" width="34" height="34" patternUnits="userSpaceOnUse" patternTransform="rotate(45)">
+      <rect width="15" height="34" fill="#de8e47" fill-opacity=".11"/>
+    </pattern>
+    <filter id="shadow" x="-20%" y="-20%" width="140%" height="150%">
+      <feDropShadow dx="0" dy="10" stdDeviation="10" flood-color="#000" flood-opacity=".34"/>
+    </filter>
+    <filter id="smallShadow" x="-30%" y="-30%" width="160%" height="180%">
+      <feDropShadow dx="0" dy="4" stdDeviation="4" flood-color="#000" flood-opacity=".32"/>
+    </filter>
+  </defs>
+
+  <rect width="1200" height="820" fill="url(#bg)"/>
+  <rect x="24" y="24" width="1152" height="772" fill="url(#grid)" stroke="#284154" stroke-width="1.5"/>
+
+  <!-- peripheral facility plates -->
+  <path d="M24 170H132l28-28h112v38H168l-26 26H24Z" fill="#101b25" stroke="#263e4e"/>
+  <path d="M1176 170h-108l-28-28H928v38h104l26 26h118Z" fill="#101b25" stroke="#263e4e"/>
+  <path d="M24 650h108l28 28h112v-38H168l-26-26H24Z" fill="#101b25" stroke="#263e4e"/>
+  <path d="M1176 650h-108l-28 28H928v-38h104l26-26h118Z" fill="#101b25" stroke="#263e4e"/>
+
+  <!-- cyan tech accents -->
+  <g fill="#1cc7df" opacity=".55">
+    <rect x="86" y="96" width="82" height="4"/>
+    <rect x="1032" y="96" width="82" height="4"/>
+    <rect x="86" y="718" width="82" height="4"/>
+    <rect x="1032" y="718" width="82" height="4"/>
+  </g>
+
+  <!-- main ring shadow/base -->
+  <path d="M162 126H1038l58 58v452l-58 58H162l-58-58V184Z" fill="#111c28" stroke="#243b4c" stroke-width="10" filter="url(#shadow)"/>
+
+  <!-- track as one even-odd slab -->
+  <path fill-rule="evenodd" d="M170 140H1030l50 50v438l-50 50H170l-50-50V190Zm108 108H922l48 48v226l-48 48H278l-48-48V296Z" fill="url(#track)" stroke="#8592a4" stroke-width="2"/>
+
+  <!-- track inner/outer detail lines -->
+  <path d="M188 157H1012l48 48v408l-48 48H188l-48-48V205Z" fill="none" stroke="#e79a54" stroke-opacity=".48" stroke-width="2"/>
+  <path d="M205 174H995l42 42v386l-42 42H205l-42-42V216Z" fill="none" stroke="#273a4b" stroke-width="2"/>
+  <path d="M279 264H921l32 32v226l-32 32H279l-32-32V296Z" fill="none" stroke="#c1ccda" stroke-opacity=".30" stroke-width="2"/>
+
+  <!-- little mechanical joints -->
+  <g fill="#28394a" stroke="#77869a" stroke-opacity=".42">
+    <rect x="144" y="222" width="16" height="68" rx="2"/>
+    <rect x="1040" y="222" width="16" height="68" rx="2"/>
+    <rect x="144" y="530" width="16" height="68" rx="2"/>
+    <rect x="1040" y="530" width="16" height="68" rx="2"/>
+  </g>
+
+  <!-- lane markings -->
+  <g fill="#ee994d" opacity=".88">
+    <path d="M391 176l17 12-17 12v-8h-24v-8h24Z"/>
+    <path d="M481 176l17 12-17 12v-8h-24v-8h24Z"/>
+    <path d="M571 176l17 12-17 12v-8h-24v-8h24Z"/>
+    <path d="M661 176l17 12-17 12v-8h-24v-8h24Z"/>
+    <path d="M751 176l17 12-17 12v-8h-24v-8h24Z"/>
+    <path d="M1019 301l12 17 12-17h-8v-24h-8v24Z"/>
+    <path d="M1019 391l12 17 12-17h-8v-24h-8v24Z"/>
+    <path d="M1019 481l12 17 12-17h-8v-24h-8v24Z"/>
+    <path d="M794 632l-17 12 17 12v-8h24v-8h-24Z"/>
+    <path d="M704 632l-17 12 17 12v-8h24v-8h-24Z"/>
+    <path d="M614 632l-17 12 17 12v-8h24v-8h-24Z"/>
+    <path d="M524 632l-17 12 17 12v-8h24v-8h-24Z"/>
+    <path d="M434 632l-17 12 17 12v-8h24v-8h-24Z"/>
+    <path d="M164 497l-12-17-12 17h8v24h8v-24Z"/>
+    <path d="M164 407l-12-17-12 17h8v24h8v-24Z"/>
+    <path d="M164 317l-12-17-12 17h8v24h8v-24Z"/>
+  </g>
+
+  <!-- center raised platform -->
+  <path d="M332 264H868l34 34v224l-34 34H332l-34-34V298Z" fill="#253446" opacity=".88" filter="url(#smallShadow)"/>
+  <path d="M345 277H855l29 29v208l-29 29H345l-29-29V306Z" fill="url(#platform)" stroke="#9aa8b9" stroke-width="2"/>
+  <path d="M360 292H840l24 24v188l-24 24H360l-24-24V316Z" fill="none" stroke="#d8e1eb" stroke-opacity=".22"/>
+
+  <!-- 4 x 6 deployment slots -->
+  <g fill="url(#slot)" stroke="#e4ebf2" stroke-opacity=".72" stroke-width="1.6">
+    <rect x="373" y="307" width="72" height="48" rx="5"/><rect x="451" y="307" width="72" height="48" rx="5"/><rect x="529" y="307" width="72" height="48" rx="5"/><rect x="607" y="307" width="72" height="48" rx="5"/><rect x="685" y="307" width="72" height="48" rx="5"/><rect x="763" y="307" width="72" height="48" rx="5"/>
+    <rect x="373" y="361" width="72" height="48" rx="5"/><rect x="451" y="361" width="72" height="48" rx="5"/><rect x="529" y="361" width="72" height="48" rx="5"/><rect x="607" y="361" width="72" height="48" rx="5"/><rect x="685" y="361" width="72" height="48" rx="5"/><rect x="763" y="361" width="72" height="48" rx="5"/>
+    <rect x="373" y="415" width="72" height="48" rx="5"/><rect x="451" y="415" width="72" height="48" rx="5"/><rect x="529" y="415" width="72" height="48" rx="5"/><rect x="607" y="415" width="72" height="48" rx="5"/><rect x="685" y="415" width="72" height="48" rx="5"/><rect x="763" y="415" width="72" height="48" rx="5"/>
+    <rect x="373" y="469" width="72" height="48" rx="5"/><rect x="451" y="469" width="72" height="48" rx="5"/><rect x="529" y="469" width="72" height="48" rx="5"/><rect x="607" y="469" width="72" height="48" rx="5"/><rect x="685" y="469" width="72" height="48" rx="5"/><rect x="763" y="469" width="72" height="48" rx="5"/>
+  </g>
+
+  <!-- slot corner details -->
+  <g fill="none" stroke="#ffffff" stroke-opacity=".28" stroke-width="1">
+    <path d="M378 313h13M379 313v13M440 349h-13M440 349v-13"/>
+    <path d="M456 313h13M457 313v13M518 349h-13M518 349v-13"/>
+    <path d="M534 313h13M535 313v13M596 349h-13M596 349v-13"/>
+    <path d="M612 313h13M613 313v13M674 349h-13M674 349v-13"/>
+    <path d="M690 313h13M691 313v13M752 349h-13M752 349v-13"/>
+    <path d="M768 313h13M769 313v13M830 349h-13M830 349v-13"/>
+  </g>
+
+  <!-- spawn ingress: lower-left, feeding upward -->
+  <g transform="translate(105 592)" filter="url(#smallShadow)">
+    <path d="M0 32 20 8h58l20 24v105H0Z" fill="url(#gate)" stroke="#4e687d" stroke-width="2"/>
+    <path d="M14 35h70M14 44h70" stroke="#7690a3" stroke-opacity=".38"/>
+    <path d="M17 109h64v17H17Z" fill="#0f3540" stroke="#176072" stroke-opacity=".55"/>
+    <path d="M43 5V-22" stroke="#e99a4c" stroke-width="4"/>
+    <path d="m43-31-11 14h22Z" fill="#e99a4c"/>
+  </g>
+
+  <!-- industrial seams / bolts -->
+  <g fill="#8fa0b1" opacity=".38">
+    <circle cx="174" cy="148" r="3"/><circle cx="1026" cy="148" r="3"/>
+    <circle cx="174" cy="670" r="3"/><circle cx="1026" cy="670" r="3"/>
+    <circle cx="284" cy="256" r="2.5"/><circle cx="916" cy="256" r="2.5"/>
+    <circle cx="284" cy="564" r="2.5"/><circle cx="916" cy="564" r="2.5"/>
+  </g>
+</svg>
