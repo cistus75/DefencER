@@ -1,0 +1,108 @@
+.battlefield {
+  perspective: 1200px;
+  background:
+    linear-gradient(rgba(118, 143, 165, .045) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(118, 143, 165, .045) 1px, transparent 1px),
+    radial-gradient(circle at 50% 28%, rgba(72, 96, 120, .22), transparent 38%),
+    linear-gradient(180deg, #101b27 0%, #172332 46%, #0b141e 100%);
+  background-size: 52px 52px, 52px 52px, auto, auto;
+}
+
+.battlefield::before {
+  inset: 3% 3% 4%;
+  background:
+    linear-gradient(180deg, rgba(112, 138, 164, .07), rgba(5, 11, 17, .22)),
+    linear-gradient(135deg, transparent 49.5%, rgba(92, 117, 139, .07) 50%, transparent 50.5%) 0 0 / 72px 72px;
+}
+
+.battlefield-world {
+  position: absolute;
+  inset: 4.5% 2.5% 1.5%;
+  transform-style: preserve-3d;
+  transform-origin: 50% 58%;
+  transform: perspective(1150px) rotateX(54deg) rotateZ(-4deg) scale(1.08);
+}
+
+.world-floor {
+  position: absolute;
+  inset: 5% 2% 3%;
+  z-index: 0;
+  clip-path: polygon(4% 0, 96% 0, 100% 7%, 100% 93%, 96% 100%, 4% 100%, 0 93%, 0 7%);
+  background:
+    linear-gradient(rgba(148, 165, 184, .035) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(148, 165, 184, .035) 1px, transparent 1px),
+    linear-gradient(180deg, rgba(45, 59, 76, .7), rgba(18, 27, 39, .86));
+  background-size: 48px 48px, 48px 48px, auto;
+  border: 1px solid rgba(119, 147, 170, .18);
+  box-shadow: 0 18px 0 #09111a, 0 28px 30px rgba(0, 0, 0, .34);
+}
+
+.battlefield-world .track--outer {
+  transform: translateZ(10px);
+  border-color: #4d5b6d;
+  box-shadow:
+    0 14px 0 #263443,
+    0 20px 22px rgba(0, 0, 0, .32),
+    inset 0 0 0 2px #2d3d4e;
+}
+
+.battlefield-world .track--outer::before {
+  border-color: rgba(233, 149, 77, .34);
+}
+
+.battlefield-world .track--inner {
+  transform: translateZ(14px);
+  border-color: #8290a2;
+  background: rgba(92, 108, 127, .22);
+  box-shadow:
+    0 9px 0 rgba(27, 37, 49, .96),
+    0 13px 18px rgba(0, 0, 0, .26);
+}
+
+.battlefield-world .placement-board {
+  transform: translateZ(24px);
+  background: rgba(92, 106, 126, .16);
+  border-color: rgba(191, 207, 221, .34);
+  box-shadow:
+    0 12px 0 #202c39,
+    0 18px 24px rgba(0, 0, 0, .3);
+}
+
+.battlefield-world .placement-slot {
+  border-color: rgba(225, 233, 239, .75);
+  background: linear-gradient(180deg, rgba(158, 171, 187, .1), rgba(94, 108, 126, .05));
+  box-shadow:
+    inset 0 0 0 1px rgba(15, 23, 32, .48),
+    0 5px 0 #26313e,
+    0 7px 9px rgba(0, 0, 0, .22);
+}
+
+.battlefield-world .track-arrows {
+  transform: translateZ(24px);
+  text-shadow: 0 2px 0 rgba(76, 43, 17, .45), 0 0 7px rgba(233, 149, 77, .2);
+}
+
+.battlefield-world .enemy-dot {
+  transform: translate(-50%, -50%) translateZ(34px);
+  box-shadow:
+    0 5px 0 rgba(11, 16, 22, .88),
+    0 8px 12px rgba(0, 0, 0, .32),
+    0 0 0 2px rgba(255, 255, 255, .12);
+}
+
+.battlefield-world .spawn-gate {
+  transform: translateX(-6px) translateZ(30px);
+}
+
+.battlefield-world .spawn-gate__tunnel {
+  box-shadow:
+    inset 0 0 24px rgba(0, 0, 0, .8),
+    0 10px 0 #17222d,
+    0 15px 18px rgba(0, 0, 0, .34);
+}
+
+@media (max-height: 820px) {
+  .battlefield-world {
+    transform: perspective(1150px) rotateX(52deg) rotateZ(-4deg) scale(1.03);
+  }
+}
