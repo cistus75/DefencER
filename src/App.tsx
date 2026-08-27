@@ -46,35 +46,38 @@ function RuleCard({ roman, title, desc }: (typeof ruleCards)[number]) {
 function Battlefield() {
   return (
     <div className="battlefield">
-      <div className="track track--outer" />
-      <div className="track track--inner" />
+      <div className="battlefield-world">
+        <div className="world-floor" />
+        <div className="track track--outer" />
+        <div className="track track--inner" />
 
-      <div className="spawn-gate" aria-label="적 출현 지점">
-        <div className="spawn-gate__tunnel" />
-        <div className="spawn-gate__glow" />
-        <span>↑</span>
-      </div>
+        <div className="spawn-gate" aria-label="적 출현 지점">
+          <div className="spawn-gate__tunnel" />
+          <div className="spawn-gate__glow" />
+          <span>↑</span>
+        </div>
 
-      <div className="track-arrows track-arrows--top">→ → → → →</div>
-      <div className="track-arrows track-arrows--right">↓<br />↓<br />↓</div>
-      <div className="track-arrows track-arrows--bottom">← ← ← ← ←</div>
-      <div className="track-arrows track-arrows--left">↑<br />↑</div>
+        <div className="track-arrows track-arrows--top">→ → → → →</div>
+        <div className="track-arrows track-arrows--right">↓<br />↓<br />↓</div>
+        <div className="track-arrows track-arrows--bottom">← ← ← ← ←</div>
+        <div className="track-arrows track-arrows--left">↑<br />↑</div>
 
-      <div className="placement-board">
-        {Array.from({ length: 24 }, (_, index) => (
-          <div className="placement-slot" key={index} />
+        <div className="placement-board">
+          {Array.from({ length: 24 }, (_, index) => (
+            <div className="placement-slot" key={index} />
+          ))}
+        </div>
+
+        {enemies.map((enemy, index) => (
+          <div
+            key={index}
+            className={`enemy-dot enemy-dot--${enemy.tone}`}
+            style={{ left: `${enemy.x}%`, top: `${enemy.y}%` }}
+          >
+            <span />
+          </div>
         ))}
       </div>
-
-      {enemies.map((enemy, index) => (
-        <div
-          key={index}
-          className={`enemy-dot enemy-dot--${enemy.tone}`}
-          style={{ left: `${enemy.x}%`, top: `${enemy.y}%` }}
-        >
-          <span />
-        </div>
-      ))}
     </div>
   )
 }
