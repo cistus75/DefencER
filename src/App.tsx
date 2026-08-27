@@ -1,131 +1,135 @@
-const rules = [
-  { title: '급속 성장', desc: '모든 아군의 공격 속도 +12%', tag: '전투' },
-  { title: '고위험 계약', desc: '적 체력 +18%, 획득 크레딧 +25%', tag: '규칙' },
-  { title: '냉각 순환', desc: '스킬 재사용 대기시간 -8%', tag: '유틸' },
+const ruleCards = [
+  { roman: 'I', tone: 'purple', icon: '✦', title: '무제한 소환 I', desc: '소환 제한이 사라집니다.' },
+  { roman: 'II', tone: 'red', icon: '●', title: '강화 적 출현 I', desc: '모든 적의 최대 체력이 15% 증가합니다.' },
+  { roman: 'III', tone: 'gold', icon: 'C', title: '시작 자금 증가 I', desc: '시작 크레딧이 150 증가합니다.' },
+  { roman: 'IV', tone: 'blue', icon: '▲', title: '공격 속도 증가 I', desc: '모든 아군의 공격 속도가 10% 증가합니다.' },
+  { roman: 'V', tone: 'green', icon: '+', title: '회복 효과 감소 I', desc: '적의 모든 회복 효과가 20% 감소합니다.' },
+  { roman: 'VI', tone: 'purple', icon: '◇', title: '카드 강화 확률 증가 I', desc: '카드 강화 성공 확률이 10% 증가합니다.' },
 ]
 
-function RuleCard({ title, desc, tag }: { title: string; desc: string; tag: string }) {
+const enemies = [
+  { x: 19, y: 14, tone: 'red' },
+  { x: 31, y: 14, tone: 'orange' },
+  { x: 43, y: 14, tone: 'red' },
+  { x: 56, y: 14, tone: 'purple' },
+  { x: 69, y: 14, tone: 'red' },
+  { x: 82, y: 14, tone: 'purple' },
+  { x: 91, y: 31, tone: 'orange' },
+  { x: 91, y: 48, tone: 'red' },
+  { x: 91, y: 66, tone: 'purple' },
+  { x: 80, y: 84, tone: 'red' },
+  { x: 66, y: 84, tone: 'orange' },
+  { x: 51, y: 84, tone: 'red' },
+  { x: 35, y: 84, tone: 'purple' },
+  { x: 19, y: 84, tone: 'orange' },
+  { x: 9, y: 67, tone: 'red' },
+  { x: 9, y: 49, tone: 'purple' },
+  { x: 9, y: 31, tone: 'orange' },
+]
+
+function RuleCard({ roman, tone, icon, title, desc }: (typeof ruleCards)[number]) {
   return (
-    <article className="rule-card">
-      <div className="rule-card__header">
-        <span className="rule-card__icon">◇</span>
-        <span className="rule-card__tag">{tag}</span>
+    <article className={`rule-card rule-card--${tone}`}>
+      <span className="rule-card__roman">{roman}</span>
+      <div className="rule-card__icon">{icon}</div>
+      <div className="rule-card__copy">
+        <strong>{title}</strong>
+        <p>{desc}</p>
       </div>
-      <strong>{title}</strong>
-      <p>{desc}</p>
     </article>
+  )
+}
+
+function Battlefield() {
+  return (
+    <div className="battlefield">
+      <div className="track track--outer" />
+      <div className="track track--inner" />
+
+      <div className="track-arrows track-arrows--top">→ → → → →</div>
+      <div className="track-arrows track-arrows--right">↓<br />↓<br />↓</div>
+      <div className="track-arrows track-arrows--bottom">← ← ← ← ←</div>
+      <div className="track-arrows track-arrows--left">↑<br />↑<br />↑</div>
+
+      <div className="placement-board">
+        {Array.from({ length: 24 }, (_, index) => (
+          <div className="placement-slot" key={index} />
+        ))}
+      </div>
+
+      {enemies.map((enemy, index) => (
+        <div
+          key={index}
+          className={`enemy-dot enemy-dot--${enemy.tone}`}
+          style={{ left: `${enemy.x}%`, top: `${enemy.y}%` }}
+        >
+          <span />
+        </div>
+      ))}
+    </div>
   )
 }
 
 function App() {
   return (
     <main className="game-shell">
-      <header className="topbar">
-        <div className="brand">
-          <span className="brand__mark">D</span>
-          <div>
-            <strong>DefencER</strong>
-            <span>ETERNAL DEFENSE PROTOCOL</span>
+      <aside className="side-panel rule-history">
+        <header className="panel-header">
+          <strong>획득한 규칙 카드</strong>
+          <span>RULE CARDS</span>
+        </header>
+        <div className="rule-list">
+          {ruleCards.map((rule) => <RuleCard key={rule.roman} {...rule} />)}
+        </div>
+      </aside>
+
+      <section className="center-stage">
+        <div className="monster-counter">몬스터 <strong>28</strong> / 50</div>
+        <Battlefield />
+
+        <div className="bottom-actions">
+          <button className="summon-button">
+            <span className="summon-plus">＋</span>
+            <div className="summon-copy">
+              <strong>소환</strong>
+              <span><b>◎</b> 20</span>
+            </div>
+          </button>
+
+          <div className="credit-box">
+            <span>크레딧</span>
+            <strong><b>◈</b> 350</strong>
           </div>
         </div>
+      </section>
 
-        <div className="battle-status">
-          <div className="status-block">
-            <span>WAVE</span>
-            <strong>07</strong>
-            <small>/ 40</small>
-          </div>
-          <div className="status-divider" />
-          <div className="status-block status-block--enemy">
-            <span>REMAIN</span>
-            <strong>18</strong>
-            <small>ENEMIES</small>
-          </div>
-        </div>
-
-        <button className="icon-button" aria-label="Settings">⌁</button>
-      </header>
-
-      <section className="game-layout">
-        <aside className="left-panel hud-panel">
-          <div className="panel-title">
-            <span>SPECIAL RULES</span>
-            <strong>특수 규칙</strong>
-          </div>
-          <div className="rules-list">
-            {rules.map((rule) => <RuleCard key={rule.title} {...rule} />)}
-          </div>
-        </aside>
-
-        <section className="battlefield-wrap">
-          <div className="battlefield">
-            <div className="ambient-grid" />
-            <div className="arena-ring arena-ring--outer" />
-            <div className="arena-ring arena-ring--inner" />
-            <div className="core">
-              <span>CORE</span>
-              <strong>100%</strong>
+      <aside className="right-column">
+        <section className="side-panel battle-info">
+          <header className="panel-header panel-header--row">
+            <div>
+              <strong>전투 정보</strong>
+              <span>BATTLE INFO</span>
             </div>
+            <button className="menu-button" aria-label="메뉴">☰</button>
+          </header>
 
-            <div className="unit unit--1">1★</div>
-            <div className="unit unit--2">2★</div>
-            <div className="unit unit--3">1★</div>
-            <div className="enemy enemy--1" />
-            <div className="enemy enemy--2" />
-            <div className="enemy enemy--3" />
-            <div className="enemy enemy--4" />
-
-            <div className="battlefield-label">
-              <span>SECTOR 01</span>
-              <strong>ABANDONED RESEARCH ZONE</strong>
-            </div>
+          <div className="info-block">
+            <span>웨이브</span>
+            <div className="wave-number"><strong>12</strong><em>/ 40</em></div>
           </div>
-
-          <div className="bottom-hud">
-            <button className="summon-button">
-              <span className="summon-button__icon">＋</span>
-              <span>
-                <small>RANDOM UNIT</small>
-                <strong>소환</strong>
-              </span>
-            </button>
-            <div className="credit-box">
-              <span className="credit-icon">C</span>
-              <div>
-                <small>CREDIT</small>
-                <strong>1,840</strong>
-              </div>
-              <span className="credit-cost">- 100</span>
-            </div>
+          <div className="info-row">
+            <span>남은 적</span>
+            <strong>● 28</strong>
           </div>
         </section>
 
-        <aside className="right-panel hud-panel">
-          <div className="wave-card">
-            <div>
-              <span>CURRENT WAVE</span>
-              <strong>07</strong>
-            </div>
-            <div className="wave-card__remaining">
-              <span>남은 적</span>
-              <strong>18</strong>
-            </div>
-            <div className="wave-progress"><span style={{ width: '58%' }} /></div>
+        <section className="side-panel detail-panel">
+          <div className="detail-empty">
+            <div className="detail-mark">◇</div>
+            <p>카드, 캐릭터, 아이템을<br />선택하면 정보가 표시됩니다.</p>
           </div>
-
-          <div className="detail-panel">
-            <div className="panel-title panel-title--compact">
-              <span>INFORMATION</span>
-              <strong>상세 정보</strong>
-            </div>
-            <div className="empty-detail">
-              <div className="empty-detail__reticle">＋</div>
-              <strong>대상을 선택하세요</strong>
-              <p>캐릭터, 아이템 또는 카드를 선택하면 상세 정보가 표시됩니다.</p>
-            </div>
-          </div>
-        </aside>
-      </section>
+        </section>
+      </aside>
     </main>
   )
 }
