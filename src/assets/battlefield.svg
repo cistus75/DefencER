@@ -1,160 +1,109 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 820" preserveAspectRatio="none" role="img" aria-label="DefencER laboratory battlefield">
   <defs>
     <linearGradient id="bg" x1="0" y1="0" x2="0" y2="1">
-      <stop offset="0" stop-color="#13232f"/>
-      <stop offset="0.5" stop-color="#101e2a"/>
-      <stop offset="1" stop-color="#08131c"/>
+      <stop offset="0" stop-color="#13232f"/><stop offset=".52" stop-color="#101e2a"/><stop offset="1" stop-color="#08131c"/>
     </linearGradient>
-    <radialGradient id="roomGlow" cx="50%" cy="45%" r="68%">
-      <stop offset="0" stop-color="#31465b" stop-opacity=".34"/>
-      <stop offset=".58" stop-color="#172837" stop-opacity=".10"/>
-      <stop offset="1" stop-color="#02080d" stop-opacity="0"/>
+    <radialGradient id="glow" cx="50%" cy="44%" r="67%">
+      <stop offset="0" stop-color="#31465b" stop-opacity=".34"/><stop offset=".62" stop-color="#172837" stop-opacity=".1"/><stop offset="1" stop-color="#02080d" stop-opacity="0"/>
     </radialGradient>
     <linearGradient id="track" x1="0" y1="0" x2="0" y2="1">
-      <stop offset="0" stop-color="#637185"/>
-      <stop offset=".5" stop-color="#59677a"/>
-      <stop offset="1" stop-color="#4b596b"/>
+      <stop offset="0" stop-color="#637185"/><stop offset=".55" stop-color="#59677a"/><stop offset="1" stop-color="#4b596b"/>
     </linearGradient>
     <linearGradient id="platform" x1="0" y1="0" x2="0" y2="1">
-      <stop offset="0" stop-color="#536276"/>
-      <stop offset="1" stop-color="#424f61"/>
+      <stop offset="0" stop-color="#536276"/><stop offset="1" stop-color="#424f61"/>
     </linearGradient>
     <linearGradient id="slot" x1="0" y1="0" x2="0" y2="1">
-      <stop offset="0" stop-color="#5c6b7f"/>
-      <stop offset="1" stop-color="#4b596c"/>
+      <stop offset="0" stop-color="#5c6b7f"/><stop offset="1" stop-color="#4b596c"/>
     </linearGradient>
     <linearGradient id="gate" x1="0" y1="0" x2="0" y2="1">
-      <stop offset="0" stop-color="#1a2b38"/>
-      <stop offset="1" stop-color="#071018"/>
+      <stop offset="0" stop-color="#1a2b38"/><stop offset="1" stop-color="#071018"/>
     </linearGradient>
-    <pattern id="floorGrid" width="54" height="54" patternUnits="userSpaceOnUse">
-      <path d="M54 0H0V54" fill="none" stroke="#8aa2b7" stroke-opacity=".045" stroke-width="1"/>
-      <path d="M0 54 54 0" fill="none" stroke="#8aa2b7" stroke-opacity=".032" stroke-width="1"/>
+    <pattern id="grid" width="54" height="54" patternUnits="userSpaceOnUse">
+      <path d="M54 0H0V54" fill="none" stroke="#8aa2b7" stroke-opacity=".045"/><path d="M0 54 54 0" fill="none" stroke="#8aa2b7" stroke-opacity=".03"/>
     </pattern>
-    <filter id="shadow" x="-20%" y="-20%" width="140%" height="160%">
-      <feDropShadow dx="0" dy="12" stdDeviation="12" flood-color="#000" flood-opacity=".38"/>
-    </filter>
-    <filter id="softShadow" x="-30%" y="-30%" width="160%" height="180%">
-      <feDropShadow dx="0" dy="5" stdDeviation="5" flood-color="#000" flood-opacity=".32"/>
-    </filter>
-    <filter id="blueGlow" x="-100%" y="-300%" width="300%" height="700%">
-      <feGaussianBlur stdDeviation="4" result="blur"/>
-      <feMerge><feMergeNode in="blur"/><feMergeNode in="SourceGraphic"/></feMerge>
-    </filter>
+    <filter id="shadow" x="-20%" y="-20%" width="140%" height="160%"><feDropShadow dx="0" dy="12" stdDeviation="12" flood-color="#000" flood-opacity=".38"/></filter>
+    <filter id="smallShadow" x="-30%" y="-30%" width="160%" height="180%"><feDropShadow dx="0" dy="5" stdDeviation="5" flood-color="#000" flood-opacity=".3"/></filter>
+    <symbol id="slotCell" viewBox="0 0 80 52">
+      <rect x="0.8" y="0.8" width="78.4" height="50.4" rx="5" fill="url(#slot)" stroke="#e2e9f0" stroke-opacity=".68" stroke-width="1.6"/>
+      <path d="M7 7h12M7 7v12M73 45H61M73 45V33" fill="none" stroke="#fff" stroke-opacity=".27"/>
+    </symbol>
   </defs>
 
   <!-- room -->
   <rect width="1200" height="820" fill="url(#bg)"/>
-  <rect width="1200" height="820" fill="url(#roomGlow)"/>
-  <rect x="26" y="24" width="1148" height="772" fill="url(#floorGrid)" stroke="#284253" stroke-width="1.5"/>
+  <rect width="1200" height="820" fill="url(#glow)"/>
+  <rect x="26" y="24" width="1148" height="772" fill="url(#grid)" stroke="#284253" stroke-width="1.5"/>
   <rect x="58" y="54" width="1084" height="712" fill="none" stroke="#1e3544" stroke-width="1.5"/>
 
-  <!-- laboratory wall masses -->
-  <path d="M58 54h256l-30 54H126l-68 62Z" fill="#0b141d" opacity=".82"/>
-  <path d="M1142 54H886l30 54h158l68 62Z" fill="#0b141d" opacity=".82"/>
-  <path d="M58 766h256l-30-54H126l-68-62Z" fill="#071019" opacity=".9"/>
-  <path d="M1142 766H886l30-54h158l68-62Z" fill="#071019" opacity=".9"/>
+  <!-- dark laboratory walls -->
+  <path d="M58 54h256l-30 54H126l-68 62Z" fill="#0b141d" opacity=".84"/>
+  <path d="M1142 54H886l30 54h158l68 62Z" fill="#0b141d" opacity=".84"/>
+  <path d="M58 766h256l-30-54H126l-68-62Z" fill="#071019" opacity=".92"/>
+  <path d="M1142 766H886l30-54h158l68-62Z" fill="#071019" opacity=".92"/>
 
-  <!-- upper lab fixtures -->
+  <!-- lab fixtures, intentionally outside combat geometry -->
   <g opacity=".72">
     <path d="M145 100h122l18 18v40H127v-40Z" fill="#223442" stroke="#486171"/>
-    <rect x="155" y="113" width="74" height="7" rx="3.5" fill="#29bde4" opacity=".65" filter="url(#blueGlow)"/>
+    <rect x="155" y="113" width="74" height="7" rx="3.5" fill="#29bde4" opacity=".67"/>
     <path d="M935 96h106l18 18v47H917v-47Z" fill="#223442" stroke="#486171"/>
-    <rect x="949" y="111" width="62" height="7" rx="3.5" fill="#5c78ff" opacity=".68" filter="url(#blueGlow)"/>
-    <circle cx="1040" cy="177" r="24" fill="#273847" stroke="#607789"/>
-    <circle cx="1040" cy="177" r="10" fill="#56b8ee" opacity=".75" filter="url(#blueGlow)"/>
-    <rect x="1035" y="132" width="10" height="23" fill="#637386"/>
+    <rect x="949" y="111" width="62" height="7" rx="3.5" fill="#5c78ff" opacity=".68"/>
+    <circle cx="1040" cy="177" r="24" fill="#273847" stroke="#607789"/><circle cx="1040" cy="177" r="10" fill="#56b8ee" opacity=".76"/>
   </g>
 
-  <!-- symmetric dark base beneath combat ring -->
+  <!-- track base, centered at x=600 -->
   <path d="M160 126H1040l62 62v444l-62 62H160l-62-62V188Z" fill="#071019" stroke="#213848" stroke-width="10" filter="url(#shadow)"/>
-
-  <!-- track slab: perfectly centered around x=600 -->
   <path fill-rule="evenodd" d="M170 142H1030l52 52v432l-52 52H170l-52-52V194Zm100 102H930l50 50v232l-50 50H270l-50-50V294Z" fill="url(#track)" stroke="#8290a2" stroke-width="2"/>
-
-  <!-- track seams -->
-  <path d="M188 158H1012l50 50v404l-50 50H188l-50-50V208Z" fill="none" stroke="#dd9352" stroke-opacity=".50" stroke-width="2"/>
+  <path d="M188 158H1012l50 50v404l-50 50H188l-50-50V208Z" fill="none" stroke="#dd9352" stroke-opacity=".5" stroke-width="2"/>
   <path d="M205 176H995l40 40v386l-40 40H205l-40-40V216Z" fill="none" stroke="#2a3e4f" stroke-width="2"/>
   <path d="M271 258H929l35 35v234l-35 35H271l-35-35V293Z" fill="none" stroke="#c7d2de" stroke-opacity=".25" stroke-width="2"/>
 
-  <!-- mechanical joints -->
+  <!-- track joints -->
   <g fill="#283a4a" stroke="#8190a2" stroke-opacity=".38">
-    <path d="M132 228h26v66l-13 13-13-13Z"/>
-    <path d="M1068 228h-26v66l13 13 13-13Z"/>
-    <path d="M132 526h26v66l-13 13-13-13Z"/>
-    <path d="M1068 526h-26v66l13 13 13-13Z"/>
+    <path d="M132 228h26v66l-13 13-13-13Z"/><path d="M1068 228h-26v66l13 13 13-13Z"/>
+    <path d="M132 526h26v66l-13 13-13-13Z"/><path d="M1068 526h-26v66l13 13 13-13Z"/>
   </g>
 
-  <!-- center platform, x=300..900 -->
-  <path d="M320 266H880l34 34v220l-34 34H320l-34-34V300Z" fill="#253547" filter="url(#softShadow)"/>
-  <path d="M334 280H866l30 30v200l-30 30H334l-30-30V310Z" fill="url(#platform)" stroke="#9eacbd" stroke-width="2"/>
-  <path d="M350 296H850l18 18v192l-18 18H350l-18-18V314Z" fill="none" stroke="#dce4ed" stroke-opacity=".22" stroke-width="1.4"/>
+  <!-- central deployment platform: x=300..900, grid stays entirely inside -->
+  <path d="M320 258H880l32 32v248l-32 32H320l-32-32V290Z" fill="#253547" filter="url(#smallShadow)"/>
+  <path d="M334 272H866l28 28v228l-28 28H334l-28-28V300Z" fill="url(#platform)" stroke="#9eacbd" stroke-width="2"/>
+  <path d="M350 286H850l18 18v220l-18 18H350l-18-18V304Z" fill="none" stroke="#dce4ed" stroke-opacity=".22" stroke-width="1.4"/>
+  <g fill="none" stroke="#91a0b1" stroke-opacity=".12"><path d="M600 286v256"/><path d="M350 414h500"/></g>
 
-  <!-- platform utility seams -->
-  <g fill="none" stroke="#91a0b1" stroke-opacity=".13" stroke-width="1">
-    <path d="M600 296v228"/>
-    <path d="M350 410h500"/>
-    <path d="M430 296 418 524"/>
-    <path d="M770 296 782 524"/>
-  </g>
-
-  <!-- deployment grid: total 530w x 270h, centered at x=600 -->
-  <g fill="url(#slot)" stroke="#e2e9f0" stroke-opacity=".68" stroke-width="1.6">
-    <rect x="335" y="310" width="80" height="60" rx="5"/><rect x="425" y="310" width="80" height="60" rx="5"/><rect x="515" y="310" width="80" height="60" rx="5"/><rect x="605" y="310" width="80" height="60" rx="5"/><rect x="695" y="310" width="80" height="60" rx="5"/><rect x="785" y="310" width="80" height="60" rx="5"/>
-    <rect x="335" y="380" width="80" height="60" rx="5"/><rect x="425" y="380" width="80" height="60" rx="5"/><rect x="515" y="380" width="80" height="60" rx="5"/><rect x="605" y="380" width="80" height="60" rx="5"/><rect x="695" y="380" width="80" height="60" rx="5"/><rect x="785" y="380" width="80" height="60" rx="5"/>
-    <rect x="335" y="450" width="80" height="60" rx="5"/><rect x="425" y="450" width="80" height="60" rx="5"/><rect x="515" y="450" width="80" height="60" rx="5"/><rect x="605" y="450" width="80" height="60" rx="5"/><rect x="695" y="450" width="80" height="60" rx="5"/><rect x="785" y="450" width="80" height="60" rx="5"/>
-    <rect x="335" y="520" width="80" height="60" rx="5"/><rect x="425" y="520" width="80" height="60" rx="5"/><rect x="515" y="520" width="80" height="60" rx="5"/><rect x="605" y="520" width="80" height="60" rx="5"/><rect x="695" y="520" width="80" height="60" rx="5"/><rect x="785" y="520" width="80" height="60" rx="5"/>
-  </g>
-
-  <!-- slot technical corners -->
-  <g fill="none" stroke="#fff" stroke-opacity=".28" stroke-width="1">
-    <path d="M341 316h12M341 316v12M409 364h-12M409 364v-12"/>
-    <path d="M431 316h12M431 316v12M499 364h-12M499 364v-12"/>
-    <path d="M521 316h12M521 316v12M589 364h-12M589 364v-12"/>
-    <path d="M611 316h12M611 316v12M679 364h-12M679 364v-12"/>
-    <path d="M701 316h12M701 316v12M769 364h-12M769 364v-12"/>
-    <path d="M791 316h12M791 316v12M859 364h-12M859 364v-12"/>
+  <!-- exact 6 x 4 deployment grid: 530 x 238, centered at x=600 -->
+  <g>
+    <use href="#slotCell" x="335" y="294" width="80" height="52"/><use href="#slotCell" x="425" y="294" width="80" height="52"/><use href="#slotCell" x="515" y="294" width="80" height="52"/><use href="#slotCell" x="605" y="294" width="80" height="52"/><use href="#slotCell" x="695" y="294" width="80" height="52"/><use href="#slotCell" x="785" y="294" width="80" height="52"/>
+    <use href="#slotCell" x="335" y="356" width="80" height="52"/><use href="#slotCell" x="425" y="356" width="80" height="52"/><use href="#slotCell" x="515" y="356" width="80" height="52"/><use href="#slotCell" x="605" y="356" width="80" height="52"/><use href="#slotCell" x="695" y="356" width="80" height="52"/><use href="#slotCell" x="785" y="356" width="80" height="52"/>
+    <use href="#slotCell" x="335" y="418" width="80" height="52"/><use href="#slotCell" x="425" y="418" width="80" height="52"/><use href="#slotCell" x="515" y="418" width="80" height="52"/><use href="#slotCell" x="605" y="418" width="80" height="52"/><use href="#slotCell" x="695" y="418" width="80" height="52"/><use href="#slotCell" x="785" y="418" width="80" height="52"/>
+    <use href="#slotCell" x="335" y="480" width="80" height="52"/><use href="#slotCell" x="425" y="480" width="80" height="52"/><use href="#slotCell" x="515" y="480" width="80" height="52"/><use href="#slotCell" x="605" y="480" width="80" height="52"/><use href="#slotCell" x="695" y="480" width="80" height="52"/><use href="#slotCell" x="785" y="480" width="80" height="52"/>
   </g>
 
   <!-- lane arrows -->
-  <g fill="#ed994d" opacity=".88">
+  <g fill="#ed994d" opacity=".9">
     <path d="M387 176l16 11-16 11v-7h-24v-8h24Z"/><path d="M477 176l16 11-16 11v-7h-24v-8h24Z"/><path d="M567 176l16 11-16 11v-7h-24v-8h24Z"/><path d="M657 176l16 11-16 11v-7h-24v-8h24Z"/><path d="M747 176l16 11-16 11v-7h-24v-8h24Z"/>
     <path d="M1021 302l11 16 11-16h-7v-24h-8v24Z"/><path d="M1021 392l11 16 11-16h-7v-24h-8v24Z"/><path d="M1021 482l11 16 11-16h-7v-24h-8v24Z"/>
     <path d="M797 632l-16 11 16 11v-7h24v-8h-24Z"/><path d="M707 632l-16 11 16 11v-7h24v-8h-24Z"/><path d="M617 632l-16 11 16 11v-7h24v-8h-24Z"/><path d="M527 632l-16 11 16 11v-7h24v-8h-24Z"/><path d="M437 632l-16 11 16 11v-7h24v-8h-24Z"/>
     <path d="M167 498l-11-16-11 16h7v24h8v-24Z"/><path d="M167 408l-11-16-11 16h7v24h8v-24Z"/><path d="M167 318l-11-16-11 16h7v24h8v-24Z"/>
   </g>
 
-  <!-- lower-left laboratory ingress, attached to track instead of protruding -->
-  <g transform="translate(128 586)" filter="url(#softShadow)">
-    <path d="M0 30 18 10h72l18 20v86H0Z" fill="url(#gate)" stroke="#4c6578" stroke-width="2"/>
-    <path d="M14 34h80M14 44h80" stroke="#7690a3" stroke-opacity=".35"/>
-    <rect x="18" y="88" width="72" height="16" fill="#0d3945" stroke="#1c7182" stroke-opacity=".52"/>
-    <rect x="46" y="-4" width="16" height="34" fill="#192936"/>
-    <path d="M54-16v16" stroke="#ef9d50" stroke-width="4"/>
-    <path d="m54-25-10 13h20Z" fill="#ef9d50"/>
+  <!-- lower-left ingress integrated into the ring -->
+  <g transform="translate(126 576)" filter="url(#smallShadow)">
+    <path d="M0 28 18 10h72l18 18v94H0Z" fill="url(#gate)" stroke="#4c6578" stroke-width="2"/>
+    <path d="M14 34h80M14 44h80" stroke="#7690a3" stroke-opacity=".35"/><rect x="18" y="94" width="72" height="16" fill="#0d3945" stroke="#1c7182" stroke-opacity=".52"/>
+    <path d="M54-18v20" stroke="#ef9d50" stroke-width="4"/><path d="m54-27-10 13h20Z" fill="#ef9d50"/>
   </g>
 
-  <!-- lab floor details outside combat area -->
+  <!-- small laboratory details -->
   <g opacity=".62">
-    <path d="M274 104h84l16 16v44h-116v-44Z" fill="#293a4a" stroke="#536a7b"/>
-    <rect x="286" y="118" width="56" height="6" rx="3" fill="#45b9e9" opacity=".65"/>
-    <path d="M842 694h108l18 18v36H824v-36Z" fill="#172632" stroke="#405768"/>
-    <rect x="849" y="708" width="72" height="5" rx="2.5" fill="#547cf4" opacity=".55"/>
-    <rect x="90" y="370" width="20" height="84" fill="#172631" stroke="#405868"/>
-    <rect x="1090" y="370" width="20" height="84" fill="#172631" stroke="#405868"/>
+    <path d="M274 104h84l16 16v44h-116v-44Z" fill="#293a4a" stroke="#536a7b"/><rect x="286" y="118" width="56" height="6" rx="3" fill="#45b9e9" opacity=".65"/>
+    <path d="M842 694h108l18 18v36H824v-36Z" fill="#172632" stroke="#405768"/><rect x="849" y="708" width="72" height="5" rx="2.5" fill="#547cf4" opacity=".55"/>
+    <rect x="90" y="370" width="20" height="84" fill="#172631" stroke="#405868"/><rect x="1090" y="370" width="20" height="84" fill="#172631" stroke="#405868"/>
   </g>
 
   <!-- cyan guidance lights -->
-  <g fill="#46bff2" opacity=".82" filter="url(#blueGlow)">
+  <g fill="#46bff2" opacity=".8">
     <rect x="188" y="112" width="14" height="4" rx="2"/><rect x="514" y="111" width="14" height="4" rx="2"/><rect x="834" y="112" width="14" height="4" rx="2"/>
     <rect x="1090" y="266" width="4" height="14" rx="2"/><rect x="1090" y="536" width="4" height="14" rx="2"/>
     <rect x="188" y="704" width="14" height="4" rx="2"/><rect x="514" y="705" width="14" height="4" rx="2"/><rect x="834" y="704" width="14" height="4" rx="2"/>
     <rect x="106" y="266" width="4" height="14" rx="2"/><rect x="106" y="536" width="4" height="14" rx="2"/>
-  </g>
-
-  <!-- bolts -->
-  <g fill="#9aabba" opacity=".35">
-    <circle cx="173" cy="145" r="3"/><circle cx="1027" cy="145" r="3"/><circle cx="173" cy="675" r="3"/><circle cx="1027" cy="675" r="3"/>
-    <circle cx="278" cy="250" r="2.5"/><circle cx="922" cy="250" r="2.5"/><circle cx="278" cy="570" r="2.5"/><circle cx="922" cy="570" r="2.5"/>
   </g>
 </svg>
