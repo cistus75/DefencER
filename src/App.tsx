@@ -111,12 +111,9 @@ function App() {
 
       <aside className="right-column">
         <section className="side-panel battle-info">
-          <header className="panel-header panel-header--row">
-            <div>
-              <strong>전투 정보</strong>
-              <span>BATTLE INFO</span>
-            </div>
-            <button className="menu-button" aria-label="메뉴">☰</button>
+          <header className="panel-header">
+            <strong>전투 정보</strong>
+            <span>BATTLE INFO</span>
           </header>
 
           <div className="info-block">
