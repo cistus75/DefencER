@@ -1,3 +1,5 @@
+import battlefieldSvg from './assets/battlefield.svg'
+
 const ruleCards = [
   { roman: 'I', title: '무제한 소환 I', desc: '소환 제한이 사라집니다.' },
   { roman: 'II', title: '강화 적 출현 I', desc: '모든 적의 최대 체력이 15% 증가합니다.' },
@@ -8,23 +10,23 @@ const ruleCards = [
 ]
 
 const enemies = [
-  { x: 19, y: 14, tone: 'red' },
-  { x: 31, y: 14, tone: 'orange' },
-  { x: 43, y: 14, tone: 'red' },
-  { x: 56, y: 14, tone: 'purple' },
-  { x: 69, y: 14, tone: 'red' },
-  { x: 82, y: 14, tone: 'purple' },
-  { x: 91, y: 31, tone: 'orange' },
-  { x: 91, y: 48, tone: 'red' },
-  { x: 91, y: 66, tone: 'purple' },
-  { x: 80, y: 84, tone: 'red' },
-  { x: 66, y: 84, tone: 'orange' },
-  { x: 51, y: 84, tone: 'red' },
-  { x: 35, y: 84, tone: 'purple' },
-  { x: 19, y: 84, tone: 'orange' },
-  { x: 9, y: 67, tone: 'red' },
-  { x: 9, y: 49, tone: 'purple' },
-  { x: 9, y: 31, tone: 'orange' },
+  { x: 19, y: 18, tone: 'red' },
+  { x: 31, y: 18, tone: 'orange' },
+  { x: 43, y: 18, tone: 'red' },
+  { x: 56, y: 18, tone: 'purple' },
+  { x: 69, y: 18, tone: 'red' },
+  { x: 82, y: 18, tone: 'purple' },
+  { x: 88, y: 33, tone: 'orange' },
+  { x: 89, y: 49, tone: 'red' },
+  { x: 89, y: 65, tone: 'purple' },
+  { x: 80, y: 80, tone: 'red' },
+  { x: 67, y: 80, tone: 'orange' },
+  { x: 54, y: 80, tone: 'red' },
+  { x: 41, y: 80, tone: 'purple' },
+  { x: 28, y: 80, tone: 'orange' },
+  { x: 12, y: 65, tone: 'red' },
+  { x: 12, y: 49, tone: 'purple' },
+  { x: 12, y: 33, tone: 'orange' },
 ]
 
 function CreditToken() {
@@ -45,36 +47,19 @@ function RuleCard({ roman, title, desc }: (typeof ruleCards)[number]) {
 
 function Battlefield() {
   return (
-    <div className="battlefield">
-      <div className="track track--outer" />
-      <div className="track track--inner" />
-
-      <div className="spawn-gate" aria-label="적 출현 지점">
-        <div className="spawn-gate__tunnel" />
-        <div className="spawn-gate__glow" />
-        <span>↑</span>
-      </div>
-
-      <div className="track-arrows track-arrows--top">→ → → → →</div>
-      <div className="track-arrows track-arrows--right">↓<br />↓<br />↓</div>
-      <div className="track-arrows track-arrows--bottom">← ← ← ← ←</div>
-      <div className="track-arrows track-arrows--left">↑<br />↑</div>
-
-      <div className="placement-board">
-        {Array.from({ length: 24 }, (_, index) => (
-          <div className="placement-slot" key={index} />
+    <div className="battlefield battlefield--svg">
+      <img className="battlefield-art" src={battlefieldSvg} alt="" aria-hidden="true" />
+      <div className="battlefield-actors">
+        {enemies.map((enemy, index) => (
+          <div
+            key={index}
+            className={`enemy-dot enemy-dot--${enemy.tone}`}
+            style={{ left: `${enemy.x}%`, top: `${enemy.y}%` }}
+          >
+            <span />
+          </div>
         ))}
       </div>
-
-      {enemies.map((enemy, index) => (
-        <div
-          key={index}
-          className={`enemy-dot enemy-dot--${enemy.tone}`}
-          style={{ left: `${enemy.x}%`, top: `${enemy.y}%` }}
-        >
-          <span />
-        </div>
-      ))}
     </div>
   )
 }
