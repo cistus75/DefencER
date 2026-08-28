@@ -28,9 +28,10 @@
     <filter id="smallShadow" x="-30%" y="-30%" width="160%" height="180%">
       <feDropShadow dx="0" dy="5" stdDeviation="5" flood-color="#000" flood-opacity=".3"/>
     </filter>
-    <symbol id="slotCell" viewBox="0 0 80 52">
-      <rect x="0.8" y="0.8" width="78.4" height="50.4" rx="5" fill="url(#slot)" stroke="#e2e9f0" stroke-opacity=".68" stroke-width="1.6"/>
-      <path d="M7 7h12M7 7v12M73 45H61M73 45V33" fill="none" stroke="#fff" stroke-opacity=".27"/>
+    <symbol id="slotCell" viewBox="0 0 146 84">
+      <rect x="1" y="1" width="144" height="82" rx="6" fill="url(#slot)" stroke="#e2e9f0" stroke-opacity=".68" stroke-width="1.6"/>
+      <path d="M8 8h14M8 8v14M138 76h-14M138 76V62" fill="none" stroke="#fff" stroke-opacity=".27"/>
+      <path d="M18 1v5M128 1v5M18 83v-5M128 83v-5" stroke="#1e2c39" stroke-opacity=".55"/>
     </symbol>
   </defs>
 
@@ -56,18 +57,18 @@
     <circle cx="1040" cy="174" r="9" fill="#56b8ee" opacity=".76"/>
   </g>
 
-  <!-- perfectly centered outer arena -->
+  <!-- centered outer arena -->
   <path d="M160 126H1040l62 62v444l-62 62H160l-62-62V188Z" fill="#071019" stroke="#213848" stroke-width="10" filter="url(#shadow)"/>
 
-  <!-- ring: outer bounds 118..1082, inner opening 220..980; both centered on x=600 -->
+  <!-- loop lane: slightly tighter around the 4 x 4 deployment board -->
   <path fill-rule="evenodd"
         d="M170 142H1030l52 52v432l-52 52H170l-52-52V194Z
-           M270 244H930l50 50v232l-50 50H270l-50-50V294Z"
+           M260 216H940l42 42v304l-42 42H260l-42-42V258Z"
         fill="url(#track)" stroke="#8290a2" stroke-width="2"/>
 
   <path d="M188 158H1012l50 50v404l-50 50H188l-50-50V208Z" fill="none" stroke="#dd9352" stroke-opacity=".5" stroke-width="2"/>
   <path d="M205 176H995l40 40v386l-40 40H205l-40-40V216Z" fill="none" stroke="#2a3e4f" stroke-width="2"/>
-  <path d="M271 258H929l35 35v234l-35 35H271l-35-35V293Z" fill="none" stroke="#c7d2de" stroke-opacity=".25" stroke-width="2"/>
+  <path d="M268 230H932l34 34v292l-34 34H268l-34-34V264Z" fill="none" stroke="#c7d2de" stroke-opacity=".25" stroke-width="2"/>
 
   <!-- symmetric track joints -->
   <g fill="#283a4a" stroke="#8190a2" stroke-opacity=".38">
@@ -77,20 +78,20 @@
     <path d="M1068 526h-26v66l13 13 13-13Z"/>
   </g>
 
-  <!-- deployment platform: centered at x=600 with comfortable grid padding -->
-  <path d="M290 244H910l34 34v294l-34 34H290l-34-34V278Z" fill="#253547" filter="url(#smallShadow)"/>
-  <path d="M306 260H894l30 30v270l-30 30H306l-30-30V290Z" fill="url(#platform)" stroke="#9eacbd" stroke-width="2"/>
-  <path d="M322 276H878l20 20v248l-20 20H322l-20-20V296Z" fill="none" stroke="#dce4ed" stroke-opacity=".22" stroke-width="1.4"/>
+  <!-- deployment platform: 4 x 4 cells fill the center instead of floating inside it -->
+  <path d="M276 218H924l36 36v312l-36 36H276l-36-36V254Z" fill="#253547" filter="url(#smallShadow)"/>
+  <path d="M288 230H912l30 30v300l-30 30H288l-30-30V260Z" fill="url(#platform)" stroke="#9eacbd" stroke-width="2"/>
+  <path d="M300 242H900l20 20v296l-20 20H300l-20-20V262Z" fill="none" stroke="#dce4ed" stroke-opacity=".22" stroke-width="1.4"/>
   <g fill="none" stroke="#91a0b1" stroke-opacity=".12">
-    <path d="M600 276v288"/><path d="M322 420h556"/>
+    <path d="M600 242v336"/><path d="M300 410h600"/>
   </g>
 
-  <!-- exact 6 x 4 grid: width 530, centered precisely at x=600 -->
+  <!-- exact 4 x 4 deployment grid -->
   <g>
-    <use href="#slotCell" x="335" y="292" width="80" height="52"/><use href="#slotCell" x="425" y="292" width="80" height="52"/><use href="#slotCell" x="515" y="292" width="80" height="52"/><use href="#slotCell" x="605" y="292" width="80" height="52"/><use href="#slotCell" x="695" y="292" width="80" height="52"/><use href="#slotCell" x="785" y="292" width="80" height="52"/>
-    <use href="#slotCell" x="335" y="354" width="80" height="52"/><use href="#slotCell" x="425" y="354" width="80" height="52"/><use href="#slotCell" x="515" y="354" width="80" height="52"/><use href="#slotCell" x="605" y="354" width="80" height="52"/><use href="#slotCell" x="695" y="354" width="80" height="52"/><use href="#slotCell" x="785" y="354" width="80" height="52"/>
-    <use href="#slotCell" x="335" y="416" width="80" height="52"/><use href="#slotCell" x="425" y="416" width="80" height="52"/><use href="#slotCell" x="515" y="416" width="80" height="52"/><use href="#slotCell" x="605" y="416" width="80" height="52"/><use href="#slotCell" x="695" y="416" width="80" height="52"/><use href="#slotCell" x="785" y="416" width="80" height="52"/>
-    <use href="#slotCell" x="335" y="478" width="80" height="52"/><use href="#slotCell" x="425" y="478" width="80" height="52"/><use href="#slotCell" x="515" y="478" width="80" height="52"/><use href="#slotCell" x="605" y="478" width="80" height="52"/><use href="#slotCell" x="695" y="478" width="80" height="52"/><use href="#slotCell" x="785" y="478" width="80" height="52"/>
+    <use href="#slotCell" x="294" y="238" width="146" height="84"/><use href="#slotCell" x="450" y="238" width="146" height="84"/><use href="#slotCell" x="606" y="238" width="146" height="84"/><use href="#slotCell" x="762" y="238" width="146" height="84"/>
+    <use href="#slotCell" x="294" y="328" width="146" height="84"/><use href="#slotCell" x="450" y="328" width="146" height="84"/><use href="#slotCell" x="606" y="328" width="146" height="84"/><use href="#slotCell" x="762" y="328" width="146" height="84"/>
+    <use href="#slotCell" x="294" y="418" width="146" height="84"/><use href="#slotCell" x="450" y="418" width="146" height="84"/><use href="#slotCell" x="606" y="418" width="146" height="84"/><use href="#slotCell" x="762" y="418" width="146" height="84"/>
+    <use href="#slotCell" x="294" y="508" width="146" height="84"/><use href="#slotCell" x="450" y="508" width="146" height="84"/><use href="#slotCell" x="606" y="508" width="146" height="84"/><use href="#slotCell" x="762" y="508" width="146" height="84"/>
   </g>
 
   <!-- lane arrows, mirrored around center -->
