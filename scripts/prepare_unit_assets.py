@@ -39,8 +39,42 @@ def remove_edge_connected_white(image: Image.Image) -> Image.Image:
         if y + 1 < height:
             stack.append((x, y + 1))
     return rgba
+
+
+def keep_largest_component(image: Image.Image) -> Image.Image:
+    """로고·문구·장식선을 제외하기 위해 가장 큰 캐릭터 성분만 남긴다."""
+    width, height = image.size
+    alpha = image.getchannel("A")
+    pixels = alpha.load()
+    visited = bytearray(width * height)
+    largest: list[tuple[int, int]] = []
+    for start_y in range(height):
+        for start_x in range(width):
+            start = start_y * width + start_x
+            if visited[start] or pixels[start_x, start_y] == 0:
+                continue
+            component = []
+            stack = [(start_x, start_y)]
+            visited[start] = 1
+            while stack:
+                x, y = stack.pop()
+                component.append((x, y))
+                for nx, ny in ((x - 1, y), (x + 1, y), (x, y - 1), (x, y + 1)):
+                    index = ny * width + nx
+                    if 0 <= nx < width and 0 <= ny < height and not visited[index] and pixels[nx, ny] > 0:
+                        visited[index] = 1
+                        stack.append((nx, ny))
+            if len(component) > len(largest):
+                largest = component
+    retained = set(largest)
+    rgba = image.load()
+    for y in range(height):
+        for x in range(width):
+            if (x, y) not in retained:
+                rgba[x, y] = (*rgba[x, y][:3], 0)
+    return image
 for name, filename in SOURCES.items():
-    image = remove_edge_connected_white(Image.open(ROOT / "reference" / "SD Characters" / filename))
+    image = keep_largest_component(remove_edge_connected_white(Image.open(ROOT / "reference" / "SD Characters" / filename)))
     alpha = image.getchannel("A")
     box = alpha.getbbox()
     if box:
