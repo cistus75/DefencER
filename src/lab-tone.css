@@ -154,28 +154,16 @@ body {
   filter: brightness(.73) saturate(.58) contrast(1.12) hue-rotate(5deg);
 }
 
-.battlefield--svg .enemy-dot {
-  border-color: #060c11;
-  box-shadow:
-    0 0 0 1px rgba(173, 190, 202, .13),
-    0 6px 10px rgba(0, 8, 14, .5),
-    0 0 7px color-mix(in srgb, var(--enemy-color) 22%, transparent);
-}
-
-.enemy-dot--orange { --enemy-color: #ad7847; }
-.enemy-dot--purple { --enemy-color: #8464a7; }
-.enemy-dot--red { --enemy-color: #bb4e55; }
-
 .bottom-actions {
   filter: drop-shadow(0 10px 22px rgba(0, 8, 14, .24));
 }
 
-.summon-button,
+.clone-button,
 .credit-box {
   transition: background-color 220ms ease, border-color 220ms ease, transform 180ms ease, box-shadow 220ms ease;
 }
 
-.summon-button {
+.clone-button {
   border-color: #34788f;
   background:
     linear-gradient(180deg, rgba(7, 19, 27, .99) 0%, rgba(4, 12, 18, .995) 100%);
@@ -185,7 +173,7 @@ body {
     0 0 0 1px rgba(16, 48, 60, .34);
 }
 
-.summon-button:hover {
+.clone-button:hover {
   border-color: #438da6;
   background:
     linear-gradient(180deg, rgba(9, 24, 34, .995) 0%, rgba(5, 15, 22, .995) 100%);
@@ -195,22 +183,22 @@ body {
     0 0 0 1px rgba(20, 61, 74, .38);
 }
 
-.summon-button:active {
+.clone-button:active {
   transform: translateY(1px) scale(.992);
 }
 
-.summon-button:focus-visible {
+.clone-button:focus-visible {
   outline: 2px solid #5c9eb5;
   outline-offset: 3px;
 }
 
-.summon-button > strong {
+.clone-button > strong {
   color: #eef3f6;
   border-bottom-color: #213a48;
   letter-spacing: -.025em;
 }
 
-.summon-cost {
+.clone-cost {
   color: #cad3d9;
   font-variant-numeric: tabular-nums;
 }
@@ -250,17 +238,17 @@ body {
   color: #929da6;
 }
 
-.wave-number strong,
+.round-number strong,
 .info-row strong {
   font-variant-numeric: tabular-nums;
 }
 
-.wave-number strong {
+.round-number strong {
   color: #e9eef2;
   letter-spacing: -.035em;
 }
 
-.wave-number em {
+.round-number em {
   color: #6f7e89;
 }
 
@@ -270,10 +258,6 @@ body {
 
 .detail-empty {
   color: #3f5260;
-}
-
-.detail-mark {
-  color: #123143;
 }
 
 .detail-empty p {
