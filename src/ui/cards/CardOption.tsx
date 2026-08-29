@@ -1,0 +1,3 @@
+import type { CardId } from '../../game/domain/common'
+import { cardDefinitions } from '../../game/config/card-definitions'
+export const CardOption=({id,selected,onClick}:{id:CardId;selected?:boolean;onClick:()=>void})=>{const card=cardDefinitions[id];return <button className={`choice-card ${selected?'choice-card--selected':''}`} style={{'--card-accent':card.accent} as React.CSSProperties} onClick={onClick}><span className="choice-card__type">{card.kind}</span><div className="choice-card__icon">+</div><div className="choice-card__body"><strong>{card.title}</strong><span>{card.subtitle}</span><p>{card.description}</p></div><span className="choice-card__select">{selected?'SELECTED':'SELECT'}</span></button>}

@@ -1,0 +1,2 @@
+import type { GameStoreState } from './game-store-state'
+export const createInitialState = (seed = 1): GameStoreState => ({ run: { phase:'ready',round:{number:1,kind:'normal',remaining:30,started:false,spawnElapsed:0,spawned:0,total:5},credits:100,successfulCloneCount:0,freeCloneTickets:0,rerolls:3,units:[],enemies:[],projectiles:[],cards:[],activeRuleEffects:[],cardOffer:[],randomSeed:seed || 0x9e3779b9,entityCounters:{unit:0,enemy:0,projectile:0},pendingSpawns:5 },notifications:[] })

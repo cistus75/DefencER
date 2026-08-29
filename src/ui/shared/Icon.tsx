@@ -1,0 +1,1 @@
+export function Icon({name,size=18}:{name:string;size?:number}){return <svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.7" aria-hidden="true"><circle cx="12" cy="12" r="8"/><path d={name==='close'?'m6 6 12 12M18 6 6 18':name==='clock'?'M12 7v5l3 2':'M5 12h14M12 5v14'}/></svg>}

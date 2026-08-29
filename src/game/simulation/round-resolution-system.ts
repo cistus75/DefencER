@@ -1,0 +1,9 @@
+import type { RunState } from '../domain/run-state'
+import { enemyDefinitions } from '../config/enemy-definitions'
+import { normalRoundReward } from '../domain/rules/economy-rules'
+import { roundDefinition } from '../domain/rules/round-rules'
+import { seededRandomGenerator } from '../infrastructure/seeded-random-generator'
+import type { CardId } from '../domain/common'
+const allCards:CardId[]=['free-clone','outer-tactics','inner-tactics','cube-watch','radar','power-module']
+export const offerCards=(run:RunState):RunState=>{let seed=run.randomSeed;const available=allCards.filter(card=>!['free-clone','outer-tactics','inner-tactics'].includes(card)||!run.activeRuleEffects.includes(card));const candidates=run.units.some(u=>!u.item)?available:available.filter(c=>!['cube-watch','radar','power-module'].includes(c));for(let i=candidates.length-1;i>0;i-=1){const r=seededRandomGenerator.next(seed);seed=r.seed;const j=Math.floor(r.value*(i+1));[candidates[i],candidates[j]]=[candidates[j],candidates[i]]}return {...run,phase:'card-selection',cardOffer:candidates.slice(0,3),randomSeed:seed}}
+export const resolveRound=(run:RunState):RunState=>{const dead=run.enemies.filter(e=>e.dead);const credits=run.credits+dead.reduce((sum,e)=>sum+enemyDefinitions[e.definitionId].reward,0);let next={...run,enemies:run.enemies.filter(e=>!e.dead),credits};if(run.round.kind==='boss'){return dead.some(e=>e.definitionId==='alpha')?{...next,phase:'victory',result:'alpha'}:run.round.remaining<=0?{...next,phase:'defeat',result:'timeout'}:next}if(run.round.remaining>0)return next;next={...next,credits:next.credits+normalRoundReward(run.round.number)};if(run.round.number===5)return offerCards(next);const number=run.round.number+1,d=roundDefinition(number);return {...next,phase:'combat',round:{number,kind:d.kind,remaining:d.duration,started:true,spawnElapsed:0,spawned:0,total:d.total},pendingSpawns:d.total}}

@@ -1,0 +1,2 @@
+import type { CardId } from '../domain/common'
+export type GameAction = {type:'START_ROUND'}|{type:'TICK';delta:number}|{type:'CLONE_UNIT'}|{type:'MOVE_OR_MERGE';sourceSlot:number;targetSlot:number}|{type:'DISCARD_UNIT';unitId:number}|{type:'SKIP_ROUND'}|{type:'CHOOSE_CARD';cardId:CardId}|{type:'EQUIP_PENDING_ITEM';unitId:number}|{type:'REROLL_CARDS'}|{type:'RESET_RUN';seed?:number}|{type:'ACKNOWLEDGE_NOTIFICATION'}

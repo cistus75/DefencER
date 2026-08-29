@@ -1,0 +1,2 @@
+import { CreditToken } from '../shared/CreditToken'
+export const BottomActionBar=({credits,cost,next,tickets,disabled,onClone}:{credits:number;cost:number;next:number;tickets:number;disabled:boolean;onClone:()=>void})=><div className="bottom-actions"><button className="clone-button" disabled={disabled} onClick={onClone}><strong>복제</strong><span className="clone-cost">현재 {cost} · 다음 {next}{tickets>0?` · 무료권 ${tickets}`:''}</span></button><div className="credit-box"><span>보유 크레딧</span><strong><CreditToken/>{credits}</strong></div></div>
