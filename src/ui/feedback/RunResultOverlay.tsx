@@ -1,2 +1,13 @@
-import type { RunState } from '../../game/domain/run-state'
-export const RunResultOverlay=({run,onReset}:{run:RunState;onReset:()=>void})=>run.phase==='victory'||run.phase==='defeat'?<div className="result-overlay"><section><span className="eyebrow">RUN RESULT</span><h1>{run.phase==='victory'?'실험 완료 / 알파 처치':run.result==='overflow'?'방어 한계 초과':'알파 제압 실패'}</h1><p>{run.result==='overflow'?'필드 적이 50마리에 도달했습니다.':run.result==='timeout'?'제한 시간 안에 알파를 처치하지 못했습니다.':'10라운드 알파를 처치했습니다.'}</p><dl><div><dt>도달 라운드</dt><dd>{run.round.number}</dd></div><div><dt>복제 횟수</dt><dd>{run.successfulCloneCount}</dd></div><div><dt>남은 크레딧</dt><dd>{run.credits}</dd></div></dl><button className="primary-button" onClick={onReset}>새 런 시작</button></section></div>:null
+import { useEffect, useRef } from 'react'
+import type { ResultViewModel } from '../../game/application/selectors/hud-selectors'
+
+export const RunResultOverlay = ({ result, onReset }: { result: ResultViewModel; onReset: () => void }) => {
+  const resetRef = useRef<HTMLButtonElement>(null)
+  useEffect(() => { if (result.visible) resetRef.current?.focus() }, [result.visible])
+  if (!result.visible) return null
+  return (
+    <div className="result-overlay" role="dialog" aria-modal="true" aria-labelledby="result-title" onKeyDown={(event) => { if (event.key === 'Tab') { event.preventDefault(); resetRef.current?.focus() } }}>
+      <section><span className="eyebrow">RUN RESULT</span><h1 id="result-title">{result.title}</h1><p>{result.description}</p><dl><div><dt>도달 라운드</dt><dd>{result.round}</dd></div><div><dt>복제 횟수</dt><dd>{result.cloneCount}</dd></div><div><dt>남은 크레딧</dt><dd>{result.credits}</dd></div></dl><div className="result-cards"><span>선택 카드</span>{result.cards.length ? <ul>{result.cards.map((title) => <li key={title}>{title}</li>)}</ul> : <strong>없음</strong>}</div><button ref={resetRef} className="primary-button" onClick={onReset}>새 런 시작</button></section>
+    </div>
+  )
+}

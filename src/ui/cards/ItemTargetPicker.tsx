@@ -1,3 +1,3 @@
-import type { UnitInstance } from '../../game/domain/unit'
-import { unitDefinitions } from '../../game/config/unit-definitions'
-export const ItemTargetPicker=({units,onPick}:{units:UnitInstance[];onPick:(id:number)=>void})=><div className="item-target-picker"><p>장착할 실험체를 선택하십시오</p>{units.map(unit=><button key={unit.id} disabled={Boolean(unit.item)} onClick={()=>onPick(unit.id)}>{unitDefinitions[unit.definitionId].name} · {unit.star}성 {unit.item?'장착 완료':''}</button>)}</div>
+import type { ItemTargetViewModel } from '../../game/application/selectors/card-selectors'
+
+export const ItemTargetPicker = ({ units, onPick }: { units: ItemTargetViewModel[]; onPick: (id: number) => void }) => <div className="item-target-picker"><p>장착할 실험체를 선택하십시오</p><div className="item-target-grid">{units.map((unit) => { const slot = String(unit.slot + 1).padStart(2, '0'); return <button key={unit.id} aria-label={`${unit.name} ${unit.star}성 · SLOT ${slot}`} disabled={unit.disabled} onClick={() => onPick(unit.id)}><img src={unit.asset} alt="" /><span><strong>{unit.name}</strong><small>{unit.star}성 · SLOT {slot}{unit.disabled ? ' · 장착 완료' : ''}</small></span></button> })}</div></div>

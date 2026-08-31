@@ -1,5 +1,12 @@
 export type NotificationCode = 'clone-succeeded'|'no-empty-slot'|'insufficient-credits'|'unit-moved'|'units-swapped'|'units-merged'|'unit-discarded'|'item-equipped'|'max-star'|'interaction-locked'|'card-rerolled'|'card-applied'|'item-attached'|'round-skipped'
-export type Notification = { id: number; code: NotificationCode; message: string }
-export const notificationMessage = (code: NotificationCode, payload: Record<string,string|number> = {}) => ({
+export type NotificationPayload = Record<string, string | number>
+export type Notification = { id: number; code: NotificationCode; payload: NotificationPayload }
+export const notificationMessage = (code: NotificationCode, payload: NotificationPayload = {}) => ({
  'clone-succeeded':`복제 완료 · ${payload.unitName} / SLOT ${String(payload.slot).padStart(2,'0')}`,'no-empty-slot':'복제 중단 · 가용 슬롯 없음','insufficient-credits':'복제 중단 · 보유 크레딧 부족','unit-moved':'배치 이동 완료','units-swapped':'위치 교환 완료','units-merged':`합성 완료 · ${payload.unitName} ${payload.star}성`,'unit-discarded':`폐기 완료 · ${payload.unitName} / 자원 회수 없음`,'item-equipped':'폐기 불가 · 장착 아이템 보유','max-star':'폐기 불가 · 5성 실험체','interaction-locked':'현재 단계에서는 조작할 수 없습니다','card-rerolled':`카드 제시 갱신 · 리롤 ${payload.remaining}회`,'card-applied':`카드 적용 완료 · ${payload.cardTitle}`,'item-attached':`아이템 장착 완료 · ${payload.unitName}`,'round-skipped':'라운드 스킵 · 전장 정리 완료'
 })[code]
+
+export const enqueueNotification = (state: GameStoreState, code: NotificationCode, payload: NotificationPayload = {}): GameStoreState => {
+  const id = Math.max(0, ...state.notifications.map((notification) => notification.id)) + 1
+  return { ...state, notifications: [...state.notifications, { id, code, payload }].slice(-5) }
+}
+import type { GameStoreState } from './game-store-state'

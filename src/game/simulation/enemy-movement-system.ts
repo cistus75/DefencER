@@ -1,4 +1,4 @@
 import type { RunState } from '../domain/run-state'
-import { enemyDefinitions } from '../config/enemy-definitions'
-import { trackLength } from '../config/battlefield-config'
-export const moveEnemies=(run:RunState,delta:number):RunState=>({...run,enemies:run.enemies.map(e=>{const speed=enemyDefinitions[e.definitionId].speed;return {...e,trackDistance:(e.trackDistance+speed*delta)%trackLength,travelledDistance:e.travelledDistance+speed*delta}})})
+import type { SimulationContext } from './simulation-context'
+
+export const moveEnemies = (run: RunState, context: SimulationContext, delta: number): RunState => ({ ...run, enemies: run.enemies.map((enemy) => { const speed = context.config.enemies[enemy.definitionId].speed; return { ...enemy, trackDistance: (enemy.trackDistance + speed * delta) % context.config.battlefield.trackLength, travelledDistance: enemy.travelledDistance + speed * delta } }) })

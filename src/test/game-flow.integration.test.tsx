@@ -1,14 +1,54 @@
 import { describe, expect, it } from 'vitest'
 import { createInitialState } from '../game/application/create-initial-state'
-import { gameReducer } from '../game/application/game-reducer'
+import { gameReducer, simulationContext } from './state-builders'
 import { cloneCost } from '../game/domain/rules/economy-rules'
 import { firstEmptySlot, INNER_SLOTS, OUTER_SLOTS } from '../game/domain/rules/board-rules'
 import { effectiveAps, effectiveAttack, effectiveRange } from '../game/domain/rules/stat-rules'
 import { unitDefinitions } from '../game/config/unit-definitions'
 import { spawnEnemies } from '../game/simulation/spawn-system'
 import { pointOnTrack, trackLength } from '../game/config/battlefield-config'
+import type { GameStoreState } from '../game/application/game-store-state'
+
+const expireNormalRound = (state: GameStoreState) => gameReducer({ ...state, run: { ...state.run, round: { ...state.run.round, remaining: 0 }, enemies: [], projectiles: [], pendingSpawns: 0 } }, { type: 'TICK', delta: 1 / 60 })
 
 describe('DefencER 1~10 prototype seams', () => {
+  it('ready→round1→round5→card→round6→alpha→victory 전체 흐름을 고정 seed로 완료한다', () => {
+    let state = gameReducer(createInitialState(101), { type: 'START_ROUND' })
+    expect(state.run).toMatchObject({ phase: 'combat', round: { number: 1 }, pendingSpawns: 5 })
+    for (let round = 1; round <= 4; round += 1) {
+      state = expireNormalRound(state)
+      expect(state.run.round.number).toBe(round + 1)
+    }
+    state = expireNormalRound(state)
+    expect(state.run.phase).toBe('card-selection')
+    expect(state.run.cardOffer).toHaveLength(3)
+    state = gameReducer(state, { type: 'CHOOSE_CARD', cardId: state.run.cardOffer[0] })
+    expect(state.run).toMatchObject({ phase: 'combat', round: { number: 6 } })
+    for (let round = 6; round <= 9; round += 1) state = expireNormalRound(state)
+    expect(state.run).toMatchObject({ phase: 'combat', round: { number: 10 }, enemies: [expect.objectContaining({ definitionId: 'alpha', hp: 3200 })] })
+    const alpha = state.run.enemies.find((enemy) => enemy.definitionId === 'alpha')!
+    state = gameReducer({ ...state, run: { ...state.run, projectiles: [{ id: 1, sourceId: 0, targetId: alpha.id, kind: 'skill', damage: 3200, speed: 900, delay: 0, position: pointOnTrack(alpha.trackDistance) }], entityCounters: { ...state.run.entityCounters, projectile: 1 } } }, { type: 'TICK', delta: 1 / 60 })
+    expect(state.run).toMatchObject({ phase: 'victory', result: 'alpha' })
+  })
+
+  it('일반 라운드 종료는 생존 필드 적과 투사체를 이월하고 생존 보상을 지급한다', () => {
+    const initial = createInitialState(1)
+    const survivor = { id: 1, definitionId: 'normal' as const, hp: 90, maxHp: 90, trackDistance: 0, travelledDistance: 0 }
+    const projectile = { id: 1, sourceId: 1, targetId: 1, kind: 'basic' as const, damage: 1, speed: 0, delay: 0, position: pointOnTrack(0) }
+    const next = gameReducer({ ...initial, run: { ...initial.run, phase: 'combat', round: { ...initial.run.round, remaining: 0 }, enemies: [survivor], projectiles: [projectile], pendingSpawns: 0 } }, { type: 'TICK', delta: 1 / 60 })
+    expect(next.run.round.number).toBe(2)
+    expect(next.run.credits).toBe(150)
+    expect(next.run.enemies).toHaveLength(1)
+    expect(next.run.projectiles).toHaveLength(1)
+  })
+
+  it('빈 필드 스킵은 시간 종료와 같은 보상·다음 라운드 경로를 사용한다', () => {
+    const initial = createInitialState(1)
+    const combat = { ...initial, run: { ...initial.run, phase: 'combat' as const, pendingSpawns: 0 } }
+    const next = gameReducer(combat, { type: 'SKIP_ROUND' })
+    expect(next.run).toMatchObject({ credits: 150, phase: 'combat', round: { number: 2 } })
+    expect(next.notifications.at(-1)?.code).toBe('round-skipped')
+  })
   it('starts with 100 credits and advances clone costs 10/20/30/40', () => {
     let state = createInitialState(42)
     expect(state.run.credits).toBe(100)
@@ -50,13 +90,17 @@ describe('DefencER 1~10 prototype seams', () => {
     expect(effectiveAttack(unitDefinitions.hyunwoo, 1, 'power-module')).toBe(40.8)
     expect(effectiveRange(unitDefinitions.rio, 'radar')).toBe(4.2)
     expect(effectiveAps(unitDefinitions.rio, 'cube-watch')).toBeCloseTo(1.593)
+    expect(effectiveAttack(unitDefinitions.hyunwoo, 1, undefined, ['outer-tactics'], 0)).toBeCloseTo(40.8)
+    expect(effectiveAttack(unitDefinitions.hyunwoo, 1, undefined, ['outer-tactics'], 6)).toBeCloseTo(28.9)
+    expect(effectiveAttack(unitDefinitions.hyunwoo, 1, undefined, ['inner-tactics'], 0)).toBeCloseTo(30.6)
+    expect(effectiveAttack(unitDefinitions.hyunwoo, 1, undefined, ['inner-tactics'], 6)).toBeCloseTo(42.5)
   })
 
   it('spawns at 0.3 seconds and makes every fifth r5 enemy fast', () => {
     const state = createInitialState(1).run
-    const spawned = spawnEnemies({ ...state, round: { ...state.round, number: 5, total: 9 }, pendingSpawns: 9 }, .9)
+    const spawned = spawnEnemies({ ...state, round: { ...state.round, number: 5, total: 9 }, pendingSpawns: 9 }, simulationContext, .9)
     expect(spawned.enemies).toHaveLength(3)
-    const five = spawnEnemies({ ...state, round: { ...state.round, number: 5, total: 9 }, pendingSpawns: 9 }, 1.5)
+    const five = spawnEnemies({ ...state, round: { ...state.round, number: 5, total: 9 }, pendingSpawns: 9 }, simulationContext, 1.5)
     expect(five.enemies[4].definitionId).toBe('fast')
   })
 
@@ -80,5 +124,14 @@ describe('DefencER 1~10 prototype seams', () => {
     const next = gameReducer({ run: { ...state, phase: 'combat', enemies, pendingSpawns: 1, round: { ...state.round, spawnElapsed: .3 } }, notifications: [] }, { type: 'TICK', delta: 1 / 60 })
     expect(next.run.phase).toBe('defeat')
     expect(next.run.result).toBe('overflow')
+  })
+
+  it('50번째 spawn 프레임에는 사거리 안 실험체도 공격하지 못한다', () => {
+    const state = createInitialState(1).run
+    const enemies = Array.from({ length: 49 }, (_, id) => ({ id: id + 1, definitionId: 'normal' as const, hp: 90, maxHp: 90, trackDistance: 0, travelledDistance: 0 }))
+    const unit = { id: 1, definitionId: 'rio' as const, slot: 0, star: 1 as const, attackCooldown: 0, skillCooldown: 0, actionLock: 0, marks: [] }
+    const next = gameReducer({ run: { ...state, phase: 'combat', units: [unit], enemies, pendingSpawns: 1, round: { ...state.round, spawnElapsed: .3 }, entityCounters: { ...state.entityCounters, enemy: 49, unit: 1 } }, notifications: [] }, { type: 'TICK', delta: 1 / 60 })
+    expect(next.run.phase).toBe('defeat')
+    expect(next.run.projectiles).toHaveLength(0)
   })
 })

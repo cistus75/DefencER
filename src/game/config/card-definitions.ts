@@ -1,5 +1,6 @@
 import type { CardDefinition } from '../domain/card'
-export const cardDefinitions: Record<string, CardDefinition> = {
+import type { CardId } from '../domain/common'
+export const cardDefinitions: Record<CardId, CardDefinition> = {
  'free-clone':{id:'free-clone',kind:'규칙',title:'자유 복제',subtitle:'다음 3회',description:'다음 3회 복제 비용이 0이 됩니다.',accent:'#5eabb7'},
  'outer-tactics':{id:'outer-tactics',kind:'규칙',title:'외곽 전술',subtitle:'외곽 +20%',description:'외곽 슬롯 피해 +20%, 안쪽 슬롯 피해 -15%',accent:'#b7a262'},
  'inner-tactics':{id:'inner-tactics',kind:'규칙',title:'중앙 전술',subtitle:'안쪽 +25%',description:'외곽 슬롯 피해 -10%, 안쪽 슬롯 피해 +25%',accent:'#b7a262'},
