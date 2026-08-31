@@ -1,4 +1,4 @@
-import { act, fireEvent, render, screen } from '@testing-library/react'
+import { act, fireEvent, render, renderHook, screen } from '@testing-library/react'
 import { describe, expect, it, vi } from 'vitest'
 import { createInitialState } from '../game/application/create-initial-state'
 import { gameReducer, simulationContext } from './state-builders'
@@ -14,9 +14,50 @@ import { RunResultOverlay } from '../ui/feedback/RunResultOverlay'
 import { resultViewModel } from '../game/application/selectors/hud-selectors'
 import { CardSelectionOverlay } from '../ui/cards/CardSelectionOverlay'
 import { PlacementBoard } from '../ui/battlefield/PlacementBoard'
-import { placementSlotsViewModel } from '../game/application/selectors/board-selectors'
+import { boardViewModel, placementSlotsViewModel } from '../game/application/selectors/board-selectors'
+import { useGameLoop } from '../app/useGameLoop'
 
 describe('명세 회귀', () => {
+  it('전투 루프는 1/60초 고정 step으로만 tick을 전달한다', () => {
+    const frames: FrameRequestCallback[] = []
+    let frameId = 0
+    const requestFrame = vi.fn((callback: FrameRequestCallback) => {
+      frames.push(callback)
+      frameId += 1
+      return frameId
+    })
+    const cancelFrame = vi.fn()
+    const now = vi.spyOn(performance, 'now').mockReturnValue(1000)
+    vi.stubGlobal('requestAnimationFrame', requestFrame)
+    vi.stubGlobal('cancelAnimationFrame', cancelFrame)
+    const dispatch = vi.fn()
+
+    try {
+      const { unmount } = renderHook(() => useGameLoop('combat', dispatch))
+      act(() => frames.shift()?.(1034))
+
+      expect(dispatch).toHaveBeenCalledTimes(2)
+      expect(dispatch).toHaveBeenNthCalledWith(1, { type: 'TICK', delta: 1 / 60 })
+      expect(dispatch).toHaveBeenNthCalledWith(2, { type: 'TICK', delta: 1 / 60 })
+      unmount()
+      expect(cancelFrame).toHaveBeenCalledWith(2)
+    } finally {
+      now.mockRestore()
+      vi.unstubAllGlobals()
+    }
+  })
+
+  it('사거리 표시는 전투 판정과 같은 픽셀 배율 설정을 사용한다', () => {
+    const run = createInitialState(1).run
+    const config = {
+      ...simulationContext.config,
+      balance: { ...simulationContext.config.balance, rangePixels: 200 },
+    }
+    const unit = { id: 1, definitionId: 'hyunwoo' as const, slot: 0, star: 1 as const, attackCooldown: 0, skillCooldown: 0, actionLock: 0, marks: [] }
+
+    expect(boardViewModel({ ...run, units: [unit] }, config)[0].rangeRadius).toBe(config.units.hyunwoo.range * 200)
+  })
+
   it('선택한 실험체가 없을 때 빈 배치 슬롯을 선택 상태로 표시하지 않는다', () => {
     const { container } = render(<PlacementBoard
       slots={placementSlotsViewModel(simulationContext.config)}

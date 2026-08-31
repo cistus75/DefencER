@@ -40,7 +40,7 @@ export const boardViewModel = (run: RunState, config: GameConfig): BoardUnitView
     color: definition.color,
     markCount: unit.marks.length,
     skillProgress: Math.max(0, 1 - unit.skillCooldown / definition.skillCooldown),
-    rangeRadius: effectiveRange(definition, unit.item) * 150,
+    rangeRadius: effectiveRange(definition, unit.item) * config.balance.rangePixels,
     centerX: config.battlefield.slotCenter(unit.slot).x,
     centerY: config.battlefield.slotCenter(unit.slot).y,
   }
