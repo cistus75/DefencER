@@ -1,6 +1,6 @@
 .game-shell{width:100vw;max-width:1920px;height:100dvh;max-height:1080px;display:grid;grid-template-columns:clamp(220px,14.7vw,282px) minmax(0,1fr) clamp(220px,14.7vw,282px);gap:10px;padding:10px;background:#0d1012}
 .center-stage{position:relative;overflow:hidden;background:#111416}
-.right-column{display:grid;grid-template-rows:318px 1fr;gap:10px;min-width:0}
+.right-column{display:grid;grid-template-rows:minmax(220px,318px) minmax(0,1fr);gap:10px;min-width:0;min-height:0}
 .stage-topbar{position:absolute;z-index:12;top:0;left:0;right:0;height:58px;display:flex;align-items:center;justify-content:center;border-bottom:1px solid #ffffff24;background:linear-gradient(180deg,#0b0e10f2,#0b0e10b8)}
 .stage-topbar__lab,.stage-topbar__state{position:absolute;top:0;height:58px;display:flex;align-items:center;font-size:9px;letter-spacing:.14em}
 .stage-topbar__lab{left:18px;gap:9px;color:#8e989c}

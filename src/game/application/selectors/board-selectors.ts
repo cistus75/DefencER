@@ -14,6 +14,9 @@ export type BoardUnitViewModel = {
   color: string
   markCount: number
   skillProgress: number
+  attackCooldown: number
+  actionLock: number
+  markDurations: number[]
   rangeRadius: number
   centerX: number
   centerY: number
@@ -40,6 +43,9 @@ export const boardViewModel = (run: RunState, config: GameConfig): BoardUnitView
     color: definition.color,
     markCount: unit.marks.length,
     skillProgress: Math.max(0, 1 - unit.skillCooldown / definition.skillCooldown),
+    attackCooldown: unit.attackCooldown,
+    actionLock: unit.actionLock,
+    markDurations: unit.marks.map((mark) => mark.remaining),
     rangeRadius: effectiveRange(definition, unit.item, run.activeRuleEffects) * config.balance.rangePixels,
     centerX: config.battlefield.slotCenter(unit.slot).x,
     centerY: config.battlefield.slotCenter(unit.slot).y,

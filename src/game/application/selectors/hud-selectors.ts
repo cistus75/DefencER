@@ -14,7 +14,7 @@ export const battleInfoViewModel = (run: RunState, config: GameConfig): BattleIn
   const definition = config.roundDefinition(run.round.number)
   return {
     round: run.round.number,
-    remaining: run.round.remaining,
+    remaining: run.phase === 'card-selection' || run.phase === 'item-targeting' ? run.cardSelectionRemaining ?? 0 : run.round.remaining,
     phaseLabel: run.phase === 'ready' ? '전투 준비' : run.phase === 'card-selection' || run.phase === 'item-targeting' ? '카드 선택 중' : '남은 시간',
     threatName: definition.bossId ? config.enemies[definition.bossId].name : run.round.number >= 31 ? '최고 위험도 군집' : run.round.number >= 21 ? '고위험 군집' : run.round.number >= 11 ? '강화 군집' : '감염체 군집',
     incoming: definition.total,
@@ -25,7 +25,7 @@ export const battleInfoViewModel = (run: RunState, config: GameConfig): BattleIn
 
 export const nextCardRound = (run: RunState) => {
   if (run.phase === 'card-selection' || run.phase === 'item-targeting') return run.round.number
-  const next = Math.ceil((run.round.number + 1) / 5) * 5
+  const next = Math.ceil(run.round.number / 5) * 5
   return next < 40 ? next : undefined
 }
 

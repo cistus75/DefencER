@@ -34,12 +34,12 @@ export const tickCardSelection = (state: GameStoreState, delta: number, context:
   if (remaining > delta) return { ...state, run: { ...state.run, cardSelectionRemaining: remaining - delta } }
   if (state.run.phase === 'item-targeting') {
     const unit = state.run.units.find((candidate) => !candidate.item)
-    return unit ? equipPendingItem(state, unit.id, context) : state
+    return unit ? equipPendingItem(state, unit.id, context) : { ...state, run: prepareRound(state.run, context, state.run.round.number + 1) }
   }
   const cardId = state.run.cardOffer[0]
   if (!cardId) return state
   const selected = chooseCard({ ...state, run: { ...state.run, cardSelectionRemaining: 0 } }, cardId, context)
   if (selected.run.phase !== 'item-targeting') return selected
   const unit = selected.run.units.find((candidate) => !candidate.item)
-  return unit ? equipPendingItem(selected, unit.id, context) : selected
+  return unit ? equipPendingItem(selected, unit.id, context) : { ...selected, run: prepareRound(selected.run, context, selected.run.round.number + 1) }
 }

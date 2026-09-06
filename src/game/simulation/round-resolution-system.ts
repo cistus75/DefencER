@@ -30,7 +30,9 @@ export const offerCards = (run: RunState, context: SimulationContext): RunState 
     const target = Math.floor(random.value * (index + 1))
     ;[candidates[index], candidates[target]] = [candidates[target], candidates[index]]
   }
-  return { ...run, phase: 'card-selection', cardOffer: candidates.slice(0, 3), cardSelectionRemaining: run.phase === 'card-selection' ? run.cardSelectionRemaining : 20, randomSeed: seed }
+  const offer = candidates.slice(0, 3)
+  if (offer.length === 0) return prepareRound(run, context, run.round.number + 1)
+  return { ...run, phase: 'card-selection', cardOffer: offer, cardSelectionRemaining: run.phase === 'card-selection' ? run.cardSelectionRemaining : 20, randomSeed: seed }
 }
 
 export const resolveRound = (run: RunState, context: SimulationContext): RunState => {

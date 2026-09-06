@@ -29,4 +29,4 @@ application│
 
 ## 렌더링
 
-배경은 `public/back.png`, 실험체는 공식 SD 원본에서 생성한 투명 512×512 WebP를 사용한다. 적은 정식 에셋 교체 전까지 `public/enemies/placeholder.svg`를 공유하며 정의별 크기와 색으로 구분한다. 배치판, 적, 투사체, 사거리 표시는 모두 1374×1145 SVG 좌표계를 `preserveAspectRatio="xMidYMid slice"`로 공유한다. 게임 화면은 최대 1920×1080으로 중앙 정렬하고, 1100px 이상 데스크톱에서는 좌우 패널을 220~282px 범위로 조정해 전장 비율을 유지한다.
+배경은 `public/back.png`, 실험체는 공식 SD 원본에서 생성한 투명 512×512 WebP를 사용한다. 적은 정식 에셋 교체 전까지 `public/enemies/placeholder.svg`를 공유하며 정의별 크기와 색으로 구분한다. 배치판, 적, 투사체, 사거리 표시는 모두 1374×1145 SVG 좌표계를 `preserveAspectRatio="xMidYMid meet"`로 공유해 플레이 공간 전체를 화면에 포함한다. 게임 화면은 최대 1920×1080으로 중앙 정렬하고, 1100px 이상 데스크톱에서는 좌우 패널을 220~282px 범위로 조정해 전장 비율을 유지한다.

@@ -36,7 +36,7 @@
 .battle-info .panel-action-button{display:block;width:calc(100% - 40px);height:46px;margin:0 20px 18px;border-color:#e0e3e3;background:#e0e3e3;color:#141719;font-weight:700}
 .battle-info .panel-action-button:hover{border-color:#fff;background:#fff;color:#0c0f10}
 .battle-info{overflow:hidden}
-.detail-panel{overflow:hidden}
+.detail-panel{overflow:auto;min-height:0}
 .detail-empty{height:100%;display:grid;place-items:center;text-align:center;color:#627681;font-size:12px;line-height:1.8}
 .detail-panel--selected{padding:20px}
 .detail-header{display:flex;justify-content:space-between;border-bottom:1px solid var(--line-soft);padding-bottom:18px}

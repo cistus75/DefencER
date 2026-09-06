@@ -3,4 +3,4 @@ dist/
 .vite/
 *.local
 .DS_Store
-package-lock.json
+*.tsbuildinfo

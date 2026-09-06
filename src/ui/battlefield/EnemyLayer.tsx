@@ -2,7 +2,7 @@ import type { CSSProperties } from 'react'
 import type { EnemyActorViewModel } from '../../game/application/selectors/board-selectors'
 
 export const EnemyLayer = ({ enemies }: { enemies: EnemyActorViewModel[] }) => (
-  <svg className="enemy-layer" viewBox="0 0 1374 1145" preserveAspectRatio="xMidYMid slice" aria-hidden="true">
+  <svg className="enemy-layer" viewBox="0 0 1374 1145" preserveAspectRatio="xMidYMid meet" aria-hidden="true">
     <foreignObject width="1374" height="1145">
       <div className="actor-coordinate-space">
         {enemies.map((enemy) => {

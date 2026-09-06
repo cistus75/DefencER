@@ -5,8 +5,8 @@ export function CardHistoryPanel({ cards, rerolls, nextRound }: { cards: CardHis
   return (
     <aside className="side-panel rule-history">
       <header className="panel-header panel-header--brand"><div className="brand-line"><span className="brand-mark">+</span><strong>DefencER</strong></div></header>
-      <div className="history-heading"><strong>실험 규칙 기록</strong><span>선택한 카드의 효과가 런에 유지됩니다.</span></div>
-      <div className="rule-list">{cards.length === 0 ? <p className="empty-history">아직 선택한 카드가 없습니다.</p> : cards.map((card, index) => <article className={`rule-card ${index === 0 ? 'rule-card--active' : ''}`} key={`${card.id}-${index}`}><div className="rule-card__icon"><Icon name={card.kind === '규칙' ? 'strategy' : 'item'} /></div><div className="rule-card__copy"><span className="rule-card__type">{card.kind} · ROUND {String(card.round).padStart(2, '0')}</span><strong>{card.title}</strong><p>{card.description}</p></div></article>)}</div>
+      <div className="history-heading"><strong>실험 규칙 기록</strong><span>획득 효과와 현재 장착·소멸 상태를 구분해 기록합니다.</span></div>
+      <div className="rule-list">{cards.length === 0 ? <p className="empty-history">아직 선택한 카드가 없습니다.</p> : cards.map((card, index) => <article className={`rule-card ${index === 0 ? 'rule-card--active' : ''}`} key={`${card.id}-${index}`}><div className="rule-card__icon"><Icon name={card.kind === '규칙' ? 'strategy' : 'item'} /></div><div className="rule-card__copy"><span className="rule-card__type">{card.kind} · ROUND {String(card.round).padStart(2, '0')}</span><strong>{card.title}</strong><p>{card.description}</p>{card.status && <small className="rule-card__status">{card.status}</small>}</div></article>)}</div>
       <div className="left-status"><div className="status-row"><span>다음 카드 선택</span><strong>{nextRound ? `ROUND ${String(nextRound).padStart(2, '0')}` : '완료'}</strong></div><div className="status-row"><span>리롤 보유</span><strong className="status-row__gold">{String(rerolls).padStart(2, '0')}</strong></div></div>
     </aside>
   )

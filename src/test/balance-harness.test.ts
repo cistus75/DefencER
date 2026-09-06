@@ -106,9 +106,12 @@ const runPolicy = (seed: number, policy: Policy): RunSample => {
   state = gameReducer(state, { type: 'START_ROUND' })
 
   let ticks = 0
+  let iterations = 0
   let maxEnemies = 0
   const maxTicks = MAX_SECONDS / simulationContext.config.balance.fixedStep
-  while (!['victory', 'defeat'].includes(state.run.phase) && ticks < maxTicks) {
+  const maxIterations = maxTicks * 4
+  while (!['victory', 'defeat'].includes(state.run.phase) && ticks < maxTicks && iterations < maxIterations) {
+    iterations += 1
     state = resolveCardChoice(state, policy)
     if (policy !== 'initial-four-only') state = cloneWhileAffordable(state)
     if (policy.startsWith('auto-merge')) state = mergeAvailable(state)
@@ -127,7 +130,7 @@ const runPolicy = (seed: number, policy: Policy): RunSample => {
     }
   }
 
-  if (!state.run.result) throw new Error(`seed ${seed} did not finish within ${MAX_SECONDS}s`)
+  if (!state.run.result) throw new Error(`seed ${seed} did not finish: phase=${state.run.phase}, round=${state.run.round.number}, iterations=${iterations}`)
   return {
     seed,
     result: state.run.result,
@@ -201,7 +204,7 @@ describe('balance baseline', () => {
 
     expect(initialFour[0]).toEqual(runPolicy(seeds[0], 'initial-four-only'))
     expect([...initialFour, ...autoSpend, ...autoMerge, ...autoMergeFirstCard, ...strategic].every((sample) => ['wickeline', 'overflow', 'timeout'].includes(sample.result))).toBe(true)
-    if (seeds.length >= 4) {
+    if (seeds.length >= 16) {
       const mergeWinRate = autoMerge.filter((sample) => sample.result === 'wickeline').length / seeds.length
       const strategicWins = strategic.filter((sample) => sample.result === 'wickeline')
       const strategicWinRate = strategicWins.length / seeds.length

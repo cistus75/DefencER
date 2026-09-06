@@ -1,5 +1,10 @@
+# /// script
+# requires-python = ">=3.11"
+# dependencies = ["Pillow>=10,<12"]
+# ///
 """공식 SD 원본을 수정하지 않고, 가장자리 연결 흰 배경을 투명화한다."""
 from pathlib import Path
+import argparse
 from PIL import Image
 
 ROOT = Path(__file__).resolve().parents[1]
@@ -73,13 +78,21 @@ def keep_largest_component(image: Image.Image) -> Image.Image:
             if (x, y) not in retained:
                 rgba[x, y] = (*rgba[x, y][:3], 0)
     return image
-for name, filename in SOURCES.items():
-    image = keep_largest_component(remove_edge_connected_white(Image.open(ROOT / "reference" / "SD Characters" / filename)))
-    alpha = image.getchannel("A")
-    box = alpha.getbbox()
-    if box:
-        image = image.crop(box)
-    canvas = Image.new("RGBA", (512, 512))
-    image.thumbnail((448, 448), Image.Resampling.LANCZOS)
-    canvas.alpha_composite(image, ((512-image.width)//2, (512-image.height)//2))
-    canvas.save(ROOT / "public" / "units" / f"{name}.webp", "WEBP", lossless=True)
+def generate_assets(output_dir: Path = ROOT / "public" / "units") -> None:
+    output_dir.mkdir(parents=True, exist_ok=True)
+    for name, filename in SOURCES.items():
+        image = keep_largest_component(remove_edge_connected_white(Image.open(ROOT / "reference" / "SD Characters" / filename)))
+        alpha = image.getchannel("A")
+        box = alpha.getbbox()
+        if box:
+            image = image.crop(box)
+        canvas = Image.new("RGBA", (512, 512))
+        image.thumbnail((448, 448), Image.Resampling.LANCZOS)
+        canvas.alpha_composite(image, ((512-image.width)//2, (512-image.height)//2))
+        canvas.save(output_dir / f"{name}.webp", "WEBP", lossless=True)
+
+
+if __name__ == "__main__":
+    parser = argparse.ArgumentParser()
+    parser.add_argument("--output-dir", type=Path, default=ROOT / "public" / "units")
+    generate_assets(parser.parse_args().output_dir)

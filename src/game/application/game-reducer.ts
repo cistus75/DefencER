@@ -26,7 +26,7 @@ export const createGameReducer = (context: SimulationContext) => (state: GameSto
     case 'RESET_RUN': return createInitialState(action.seed ?? context.random.next(state.run.randomSeed).seed)
     case 'ACKNOWLEDGE_NOTIFICATION': return { ...state, notifications: state.notifications.slice(1) }
     case 'START_ROUND': return startRound(state, context)
-    case 'TICK': return state.run.phase === 'combat' ? tickCombat(state, action.delta, context) : tickCardSelection(state, action.delta, context)
+    case 'TICK': return !Number.isFinite(action.delta) || action.delta <= 0 ? state : state.run.phase === 'combat' ? tickCombat(state, action.delta, context) : tickCardSelection(state, action.delta, context)
     case 'CLONE_UNIT': return cloneUnit(state, context)
     case 'MOVE_OR_MERGE': return resolveBoardDrop(state, action.sourceSlot, action.targetSlot, context)
     case 'DISCARD_UNIT': return discardUnit(state, action.unitId, context)

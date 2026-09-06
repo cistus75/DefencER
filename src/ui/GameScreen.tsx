@@ -93,6 +93,7 @@ export function GameScreen() {
           round={run.round.number}
           remaining={run.cardSelectionRemaining}
           offer={cardOfferViewModel(run, config)}
+          pendingCard={run.pendingCard ? cardOfferViewModel({ ...run, cardOffer: [run.pendingCard] }, config)[0] : undefined}
           highlighted={ui.highlightedCard}
           itemTargeting={run.phase === 'item-targeting'}
           units={itemTargetViewModel(run, config)}

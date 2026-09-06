@@ -64,6 +64,9 @@
   overflow: visible;
 }
 
+.enemy-layer,
+.projectile-layer { pointer-events: none; }
+
 .placement-slot {
   cursor: pointer;
   outline: 0;
@@ -122,6 +125,8 @@
   flex-direction: column;
   filter: drop-shadow(0 6px 7px #000b);
 }
+.unit-badge--locked { opacity: .65; filter: grayscale(.6) drop-shadow(0 6px 7px #000b); }
+.unit-badge--ready .skill-progress { box-shadow: 0 0 7px var(--cyan); }
 
 .unit-sd {
   position: absolute;
@@ -163,6 +168,7 @@
   color: #e3cb75;
   font-size: 9px;
 }
+.unit-action-state { position: absolute; z-index: 4; top: 22px; color: #f0d58b; font-size: 8px; text-shadow: 0 1px 3px #000; }
 
 .skill-progress {
   height: 3px;

@@ -169,7 +169,7 @@ describe('명세 회귀', () => {
 
     const layer = container.querySelector('svg.enemy-layer')
     expect(layer).toHaveAttribute('viewBox', '0 0 1374 1145')
-    expect(layer).toHaveAttribute('preserveAspectRatio', 'xMidYMid slice')
+    expect(layer).toHaveAttribute('preserveAspectRatio', 'xMidYMid meet')
     expect(container.querySelector('.enemy')?.tagName).toBe('DIV')
     expect(container.querySelector<HTMLElement>('.enemy')?.style.transform).toContain('translate3d(243px, 196px, 0)')
   })

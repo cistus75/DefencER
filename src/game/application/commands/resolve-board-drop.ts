@@ -5,6 +5,7 @@ import { enqueueNotification } from '../notification'
 import type { SimulationContext } from '../../simulation/simulation-context'
 
 export const resolveBoardDrop = (state: GameStoreState, sourceSlot: number, targetSlot: number, context: SimulationContext): GameStoreState => {
+  if (!Number.isInteger(sourceSlot) || !Number.isInteger(targetSlot) || sourceSlot < 0 || sourceSlot >= 20 || targetSlot < 0 || targetSlot >= 20) return state
   if (sourceSlot === targetSlot) return state
   const source = state.run.units.find((unit) => unit.slot === sourceSlot)
   const target = state.run.units.find((unit) => unit.slot === targetSlot)

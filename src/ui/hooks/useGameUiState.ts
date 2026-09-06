@@ -31,6 +31,12 @@ export const useGameUiState = (run: RunState) => {
     }
   }, [run.phase])
 
+  useEffect(() => {
+    setDragSourceSlot(undefined)
+    setDragTargetSlot(undefined)
+    setSelectedUnitId(undefined)
+  }, [run.randomSeed])
+
   const clearDrag = () => {
     setDragSourceSlot(undefined)
     setDragTargetSlot(undefined)
