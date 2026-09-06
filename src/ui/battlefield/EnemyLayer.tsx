@@ -9,6 +9,8 @@ export const EnemyLayer = ({ enemies }: { enemies: EnemyActorViewModel[] }) => (
           const diameter = enemy.radius * 2
           return (
             <div key={enemy.id} className={`enemy enemy--${enemy.definitionId}`} style={{ width: diameter, height: diameter, transform: `translate3d(${enemy.x - enemy.radius}px, ${enemy.y - enemy.radius}px, 0)` } as CSSProperties}>
+              <img src={enemy.asset ?? '/enemies/placeholder.svg'} alt="" />
+              {enemy.definitionId !== 'normal' && enemy.definitionId !== 'fast' && <b>{enemy.name ?? enemy.definitionId}</b>}
               <span className="enemy-health-track"><i className="enemy-health-value" style={{ width: `${enemy.hpRatio * 100}%` }} /></span>
             </div>
           )

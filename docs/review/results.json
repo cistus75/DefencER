@@ -1,0 +1,125 @@
+{
+  "measuredAt": "2026-09-06T16:40:27.469Z",
+  "head": "c5531149f5d178ea4040ab977f6d6bc1da22a390",
+  "scope": "Uncommitted worktree, not HEAD alone",
+  "sourceFingerprint": {
+    "algorithm": "SHA256 of sorted src TS/TSX/CSS paths and file bytes separated by NUL",
+    "files": 100,
+    "value": "1e83ac60f92d6b79f7a0647e2a0440838d7593d0b62d29361a1d81705ef01fc2"
+  },
+  "runtime": {
+    "node": "v26.4.0",
+    "npm": "11.17.0"
+  },
+  "command": "./node_modules/.bin/vitest run --config docs/review/vitest.config.ts",
+  "tests": 21,
+  "passed": 6,
+  "failed": 15,
+  "results": [
+    {
+      "name": "R1 empty candidate pool must not permanently hold card selection",
+      "status": "failed",
+      "failure": "AssertionError: expected 'card-selection' not to be 'card-selection' // Object.is equality"
+    },
+    {
+      "name": "R3 existing specification explicitly allows queued same-tick AOE",
+      "status": "passed"
+    },
+    {
+      "name": "R4 detail range includes extended sensors",
+      "status": "failed",
+      "failure": "AssertionError: expected 3.5 to be close to 3.92, received difference is 0.41999999999999993, but expected 0.005"
+    },
+    {
+      "name": "R4 detail APS includes rapid cycle",
+      "status": "failed",
+      "failure": "AssertionError: expected 1.35 to be close to 1.5525, received difference is 0.2024999999999999, but expected 0.005"
+    },
+    {
+      "name": "R5 round 5 combat still owes its current card",
+      "status": "failed",
+      "failure": "AssertionError: expected 10 to be 5 // Object.is equality"
+    },
+    {
+      "name": "R5 round 10 combat still owes its current card",
+      "status": "failed",
+      "failure": "AssertionError: expected 15 to be 10 // Object.is equality"
+    },
+    {
+      "name": "R5 round 15 combat still owes its current card",
+      "status": "failed",
+      "failure": "AssertionError: expected 20 to be 15 // Object.is equality"
+    },
+    {
+      "name": "R5 round 20 combat still owes its current card",
+      "status": "failed",
+      "failure": "AssertionError: expected 25 to be 20 // Object.is equality"
+    },
+    {
+      "name": "R5 round 25 combat still owes its current card",
+      "status": "failed",
+      "failure": "AssertionError: expected 30 to be 25 // Object.is equality"
+    },
+    {
+      "name": "R5 round 30 combat still owes its current card",
+      "status": "failed",
+      "failure": "AssertionError: expected 35 to be 30 // Object.is equality"
+    },
+    {
+      "name": "R5 round 35 combat still owes its current card",
+      "status": "failed",
+      "failure": "AssertionError: expected undefined to be 35 // Object.is equality"
+    },
+    {
+      "name": "R6 item targeting must still show the deadline",
+      "status": "failed",
+      "failure": "AssertionError: expected null not to be null"
+    },
+    {
+      "name": "R9 an external drag with no slot payload must not move slot zero",
+      "status": "failed",
+      "failure": "AssertionError: expected \"vi.fn()\" to not be called at all, but actually been called 1 times"
+    },
+    {
+      "name": "R10 card history must not invent Hyunwoo for a removed Rio",
+      "status": "failed",
+      "failure": "AssertionError: expected '현우' not to be '현우' // Object.is equality"
+    },
+    {
+      "name": "H2 reset within ready should clear stale drag state (API-only edge)",
+      "status": "failed",
+      "failure": "AssertionError: expected +0 to be undefined"
+    },
+    {
+      "name": "H1 invalid destination must not corrupt the board",
+      "status": "failed",
+      "failure": "AssertionError: expected [Function] to not throw an error but 'TypeError: Cannot read properties of …' was thrown"
+    },
+    {
+      "name": "bounded mixed-action fuzz preserves board, economy and entity invariants",
+      "status": "passed"
+    },
+    {
+      "name": "candidate shortage yields two cards under four rules plus one item",
+      "status": "passed"
+    },
+    {
+      "name": "card reroll keeps an already elapsed selection deadline",
+      "status": "passed"
+    },
+    {
+      "name": "card input locking blocks board mutation",
+      "status": "passed"
+    },
+    {
+      "name": "current loop deliberately counts only 0.1 seconds after a 1 second frame gap",
+      "status": "passed"
+    }
+  ],
+  "notes": [
+    "Diagnostic failures are expected on the unmodified implementation.",
+    "R3 protects existing same-tick AOE behavior, not a confirmed bug.",
+    "H1/H2 concern injected API edges, not observed normal UI failures.",
+    "Default npm test excludes these opt-in diagnostic probes."
+  ]
+}

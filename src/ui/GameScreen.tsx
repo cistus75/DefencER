@@ -3,7 +3,7 @@ import { useGameConfig, useGameState } from '../app/useGameState'
 import { boardViewModel, enemyActorsViewModel, placementSlotsViewModel, projectileActorsViewModel } from '../game/application/selectors/board-selectors'
 import { cardHistoryViewModel, cardOfferViewModel, itemTargetViewModel } from '../game/application/selectors/card-selectors'
 import { selectedUnitViewModel } from '../game/application/selectors/detail-selectors'
-import { battleInfoViewModel, boardInteractionEnabled, hudViewModel, notificationViewModel, resultViewModel } from '../game/application/selectors/hud-selectors'
+import { battleInfoViewModel, boardInteractionEnabled, hudViewModel, nextCardRound, notificationViewModel, resultViewModel } from '../game/application/selectors/hud-selectors'
 import { Battlefield } from './battlefield/Battlefield'
 import { CardSelectionOverlay } from './cards/CardSelectionOverlay'
 import { RunResultOverlay } from './feedback/RunResultOverlay'
@@ -25,6 +25,7 @@ export function GameScreen() {
   const hud = hudViewModel(run)
   const cards = run.phase === 'card-selection' || run.phase === 'item-targeting'
   const canManipulateBoard = boardInteractionEnabled(run.phase)
+  const cloneDisabledReason = cards ? '카드 선택 중' : run.phase === 'victory' || run.phase === 'defeat' ? '런 종료' : run.units.length >= 20 ? '가용 슬롯 없음' : hud.freeCloneTickets === 0 && hud.credits < hud.currentCost ? '크레딧 부족' : undefined
 
   const handleBoardDrop = (sourceSlot: number, targetSlot: number) => {
     const source = run.units.find((unit) => unit.slot === sourceSlot)
@@ -43,9 +44,9 @@ export function GameScreen() {
 
   return (
     <main className="game-shell">
-      <CardHistoryPanel cards={cardHistoryViewModel(run, config)} rerolls={run.rerolls} />
+      <CardHistoryPanel cards={cardHistoryViewModel(run, config)} rerolls={run.rerolls} nextRound={nextCardRound(run)} />
       <section className="center-stage">
-        <TopStatusBar count={hud.enemyCount} />
+        <TopStatusBar count={hud.enemyCount} state={run.phase === 'combat' ? '교전 중' : run.phase === 'ready' ? '배치 준비' : run.phase === 'victory' ? '실험 완료' : run.phase === 'defeat' ? '실험 종료' : '카드 분석'} />
         <Battlefield
           slots={placementSlotsViewModel(config)}
           units={board}
@@ -66,7 +67,8 @@ export function GameScreen() {
           cost={hud.currentCost}
           next={hud.nextCost}
           tickets={hud.freeCloneTickets}
-          disabled={cards || run.phase === 'victory' || run.phase === 'defeat'}
+          disabled={cloneDisabledReason !== undefined}
+          disabledReason={cloneDisabledReason}
           onClone={() => dispatch({ type: 'CLONE_UNIT' })}
         />
         <ToastRegion
@@ -76,7 +78,7 @@ export function GameScreen() {
       </section>
       <aside className="right-column">
         <BattleInfoPanel
-          viewModel={battleInfoViewModel(run)}
+          viewModel={battleInfoViewModel(run, config)}
           onStart={() => dispatch({ type: 'START_ROUND' })}
           onSkip={() => dispatch({ type: 'SKIP_ROUND' })}
           onOpenCards={() => ui.setOverlayVisible(true)}
@@ -88,6 +90,8 @@ export function GameScreen() {
       </aside>
       {cards && ui.overlayVisible && (
         <CardSelectionOverlay
+          round={run.round.number}
+          remaining={run.cardSelectionRemaining}
           offer={cardOfferViewModel(run, config)}
           highlighted={ui.highlightedCard}
           itemTargeting={run.phase === 'item-targeting'}

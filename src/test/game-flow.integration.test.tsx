@@ -9,26 +9,45 @@ import { spawnEnemies } from '../game/simulation/spawn-system'
 import { pointOnTrack, trackLength } from '../game/config/battlefield-config'
 import type { GameStoreState } from '../game/application/game-store-state'
 
-const expireNormalRound = (state: GameStoreState) => gameReducer({ ...state, run: { ...state.run, round: { ...state.run.round, remaining: 0 }, enemies: [], projectiles: [], pendingSpawns: 0 } }, { type: 'TICK', delta: 1 / 60 })
+const startIfReady = (state: GameStoreState) => state.run.phase === 'ready' ? gameReducer(state, { type: 'START_ROUND' }) : state
+const expireNormalRound = (state: GameStoreState) => {
+  const combat = startIfReady(state)
+  return gameReducer({ ...combat, run: { ...combat.run, round: { ...combat.run.round, remaining: 0 }, enemies: [], projectiles: [], pendingSpawns: 0 } }, { type: 'TICK', delta: 1 / 60 })
+}
 
-describe('DefencER 1~10 prototype seams', () => {
-  it('ready→round1→round5→card→round6→alpha→victory 전체 흐름을 고정 seed로 완료한다', () => {
-    let state = gameReducer(createInitialState(101), { type: 'START_ROUND' })
-    expect(state.run).toMatchObject({ phase: 'combat', round: { number: 1 }, pendingSpawns: 5 })
-    for (let round = 1; round <= 4; round += 1) {
-      state = expireNormalRound(state)
-      expect(state.run.round.number).toBe(round + 1)
+const chooseOfferedCard = (state: GameStoreState) => {
+  if (state.run.phase !== 'card-selection') return state
+  let next = gameReducer(state, { type: 'CHOOSE_CARD', cardId: state.run.cardOffer[0] })
+  if (next.run.phase === 'item-targeting') {
+    const target = next.run.units.find((unit) => !unit.item)!
+    next = gameReducer(next, { type: 'EQUIP_PENDING_ITEM', unitId: target.id })
+  }
+  return next
+}
+
+describe('DefencER 1~40 MVP seams', () => {
+  it('준비, 카드, 4종 보스를 거쳐 40라운드 위클라인 처치로 승리한다', () => {
+    let state = createInitialState(101)
+    for (let index = 0; index < 4; index += 1) state = gameReducer(state, { type: 'CLONE_UNIT' })
+
+    for (let round = 1; round <= 40; round += 1) {
+      expect(state.run).toMatchObject({ phase: 'ready', round: { number: round, started: false } })
+      state = gameReducer(state, { type: 'START_ROUND' })
+      if (round % 10 === 0) {
+        const boss = state.run.enemies.find((enemy) => enemy.definitionId === simulationContext.config.roundDefinition(round).bossId)!
+        state = gameReducer({ ...state, run: { ...state.run, projectiles: [{ id: round, sourceId: 0, targetId: boss.id, kind: 'skill', damage: boss.maxHp, speed: 900, delay: 0, position: pointOnTrack(boss.trackDistance) }], entityCounters: { ...state.run.entityCounters, projectile: round } } }, { type: 'TICK', delta: 1 / 60 })
+      } else {
+        state = expireNormalRound(state)
+      }
+      if (round % 5 === 0 && round < 40) {
+        expect(state.run.phase).toBe('card-selection')
+        expect(state.run.cardOffer).toHaveLength(3)
+        state = chooseOfferedCard(state)
+      }
     }
-    state = expireNormalRound(state)
-    expect(state.run.phase).toBe('card-selection')
-    expect(state.run.cardOffer).toHaveLength(3)
-    state = gameReducer(state, { type: 'CHOOSE_CARD', cardId: state.run.cardOffer[0] })
-    expect(state.run).toMatchObject({ phase: 'combat', round: { number: 6 } })
-    for (let round = 6; round <= 9; round += 1) state = expireNormalRound(state)
-    expect(state.run).toMatchObject({ phase: 'combat', round: { number: 10 }, enemies: [expect.objectContaining({ definitionId: 'alpha', hp: 3200 })] })
-    const alpha = state.run.enemies.find((enemy) => enemy.definitionId === 'alpha')!
-    state = gameReducer({ ...state, run: { ...state.run, projectiles: [{ id: 1, sourceId: 0, targetId: alpha.id, kind: 'skill', damage: 3200, speed: 900, delay: 0, position: pointOnTrack(alpha.trackDistance) }], entityCounters: { ...state.run.entityCounters, projectile: 1 } } }, { type: 'TICK', delta: 1 / 60 })
-    expect(state.run).toMatchObject({ phase: 'victory', result: 'alpha' })
+
+    expect(state.run).toMatchObject({ phase: 'victory', result: 'wickeline', round: { number: 40 } })
+    expect(state.run.cards).toHaveLength(7)
   })
 
   it('일반 라운드 종료는 생존 필드 적과 투사체를 이월하고 생존 보상을 지급한다', () => {
@@ -46,7 +65,7 @@ describe('DefencER 1~10 prototype seams', () => {
     const initial = createInitialState(1)
     const combat = { ...initial, run: { ...initial.run, phase: 'combat' as const, pendingSpawns: 0 } }
     const next = gameReducer(combat, { type: 'SKIP_ROUND' })
-    expect(next.run).toMatchObject({ credits: 150, phase: 'combat', round: { number: 2 } })
+    expect(next.run).toMatchObject({ credits: 150, phase: 'ready', round: { number: 2 } })
     expect(next.notifications.at(-1)?.code).toBe('round-skipped')
   })
   it('starts with 100 credits and advances clone costs 10/20/30/40', () => {
@@ -85,15 +104,17 @@ describe('DefencER 1~10 prototype seams', () => {
   })
 
   it('applies fixed stat rules', () => {
-    expect(effectiveAttack(unitDefinitions.hyunwoo, 2)).toBe(40.8)
-    expect(effectiveAttack(unitDefinitions.hyunwoo, 5)).toBe(79.56)
+    expect(effectiveAttack(unitDefinitions.hyunwoo, 2)).toBeCloseTo(62.9)
+    expect(effectiveAttack(unitDefinitions.hyunwoo, 5)).toBeCloseTo(380.8)
     expect(effectiveAttack(unitDefinitions.hyunwoo, 1, 'power-module')).toBe(40.8)
     expect(effectiveRange(unitDefinitions.rio, 'radar')).toBe(4.2)
     expect(effectiveAps(unitDefinitions.rio, 'cube-watch')).toBeCloseTo(1.593)
     expect(effectiveAttack(unitDefinitions.hyunwoo, 1, undefined, ['outer-tactics'], 0)).toBeCloseTo(40.8)
-    expect(effectiveAttack(unitDefinitions.hyunwoo, 1, undefined, ['outer-tactics'], 6)).toBeCloseTo(28.9)
-    expect(effectiveAttack(unitDefinitions.hyunwoo, 1, undefined, ['inner-tactics'], 0)).toBeCloseTo(30.6)
-    expect(effectiveAttack(unitDefinitions.hyunwoo, 1, undefined, ['inner-tactics'], 6)).toBeCloseTo(42.5)
+    expect(effectiveAttack(unitDefinitions.hyunwoo, 1, undefined, ['outer-tactics'], 6)).toBeCloseTo(22.1)
+    expect(effectiveAttack(unitDefinitions.hyunwoo, 1, undefined, ['inner-tactics'], 0)).toBeCloseTo(13.6)
+    expect(effectiveAttack(unitDefinitions.hyunwoo, 1, undefined, ['inner-tactics'], 6)).toBeCloseTo(85)
+    expect(effectiveAttack(unitDefinitions.hyunwoo, 1, undefined, ['outer-tactics', 'inner-tactics'], 0)).toBeCloseTo(16.32)
+    expect(effectiveAttack(unitDefinitions.hyunwoo, 1, undefined, ['outer-tactics', 'inner-tactics'], 6)).toBeCloseTo(55.25)
   })
 
   it('spawns at 0.3 seconds and makes every fifth r5 enemy fast', () => {
@@ -115,7 +136,7 @@ describe('DefencER 1~10 prototype seams', () => {
     expect(state.run.phase).toBe('card-selection')
     const rule = state.run.cardOffer.find(card => ['free-clone', 'outer-tactics', 'inner-tactics'].includes(card))
     if (rule) state = gameReducer(state, { type: 'CHOOSE_CARD', cardId: rule })
-    expect(['card-selection', 'combat']).toContain(state.run.phase)
+    expect(['card-selection', 'ready']).toContain(state.run.phase)
   })
 
   it('defeats immediately when the 50th field enemy appears', () => {

@@ -5,4 +5,4 @@ import type { EnemyInstance } from './enemy'
 import type { Projectile } from './projectile'
 import type { RoundState } from './round'
 import type { UnitInstance } from './unit'
-export type RunState = { phase: Phase; round: RoundState; credits: number; successfulCloneCount: number; freeCloneTickets: number; rerolls: number; units: UnitInstance[]; enemies: EnemyInstance[]; projectiles: Projectile[]; cards: CardRecord[]; activeRuleEffects: ActiveRuleEffects; cardOffer: CardId[]; pendingCard?: CardId; randomSeed: number; entityCounters: { unit: number; enemy: number; projectile: number }; result?: 'overflow'|'timeout'|'alpha'; pendingSpawns: number }
+export type RunState = { phase: Phase; round: RoundState; credits: number; successfulCloneCount: number; freeCloneTickets: number; rerolls: number; units: UnitInstance[]; enemies: EnemyInstance[]; projectiles: Projectile[]; cards: CardRecord[]; activeRuleEffects: ActiveRuleEffects; cardOffer: CardId[]; pendingCard?: CardId; cardSelectionRemaining?: number; randomSeed: number; entityCounters: { unit: number; enemy: number; projectile: number }; result?: 'overflow'|'timeout'|'wickeline'; pendingSpawns: number }

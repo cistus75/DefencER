@@ -4,7 +4,7 @@ import type { CardId } from '../../game/domain/common'
 import { CardOption } from './CardOption'
 import { ItemTargetPicker } from './ItemTargetPicker'
 
-export function CardSelectionOverlay({ offer, highlighted, itemTargeting, units, rerolls, onHighlight, onApply, onReroll, onClose, onEquip }: { offer: CardOptionViewModel[]; highlighted?: CardId; itemTargeting: boolean; units: ItemTargetViewModel[]; rerolls: number; onHighlight: (id: CardId) => void; onApply: () => void; onReroll: () => void; onClose: () => void; onEquip: (id: number) => void }) {
+export function CardSelectionOverlay({ round = 5, remaining, offer, highlighted, itemTargeting, units, rerolls, onHighlight, onApply, onReroll, onClose, onEquip }: { round?: number; remaining?: number; offer: CardOptionViewModel[]; highlighted?: CardId; itemTargeting: boolean; units: ItemTargetViewModel[]; rerolls: number; onHighlight: (id: CardId) => void; onApply: () => void; onReroll: () => void; onClose: () => void; onEquip: (id: number) => void }) {
   const panelRef = useRef<HTMLElement>(null)
   const previousFocusRef = useRef<HTMLElement | undefined>(undefined)
   useEffect(() => {
@@ -28,8 +28,8 @@ export function CardSelectionOverlay({ offer, highlighted, itemTargeting, units,
     <div className="card-overlay" role="dialog" aria-modal="true" aria-labelledby="card-dialog-title" onKeyDown={handleKeyDown}>
       <div className="card-overlay__scrim" />
       <section ref={panelRef} className="card-choice-panel">
-        <header className="card-choice-header"><div><span className="eyebrow">ROUND 05 · CHOOSE ONE</span><h2 id="card-dialog-title">{itemTargeting ? '장착 대상을 선택하십시오' : '작전 카드를 선택하십시오'}</h2></div><button className="icon-button" onClick={onClose} aria-label="카드 선택 닫기">×</button></header>
-        {itemTargeting ? <ItemTargetPicker units={units} onPick={onEquip} /> : <><div className="card-grid">{offer.map((card) => <CardOption key={card.id} card={card} selected={highlighted === card.id} onClick={() => onHighlight(card.id)} />)}</div><div className="reroll-row"><button className="reroll-button" onClick={onReroll} disabled={!rerolls} aria-label={`카드 리롤, ${rerolls}회 남음`}>↻<b>{String(rerolls).padStart(2, '0')}</b></button></div><div className="card-choice-footer"><span>선택 대기 중 · 제한 시간 없음</span><button className="primary-button" disabled={!highlighted} onClick={onApply}>카드 적용</button></div></>}
+        <header className="card-choice-header"><div><span className="eyebrow">ROUND {String(round).padStart(2, '0')} / CARD PROTOCOL</span><h2 id="card-dialog-title">{itemTargeting ? '장착 대상을 선택하십시오' : '작전 카드를 선택하십시오'}</h2></div><button className="icon-button" onClick={onClose} aria-label="카드 선택 닫기">×</button></header>
+        {itemTargeting ? <ItemTargetPicker units={units} onPick={onEquip} /> : <><div className="card-grid">{offer.map((card) => <CardOption key={card.id} card={card} selected={highlighted === card.id} onClick={() => onHighlight(card.id)} />)}</div><div className="reroll-row"><div className="reroll-control"><button className="reroll-button" onClick={onReroll} disabled={!rerolls} aria-label={`카드 리롤, ${rerolls}회 남음`}>↻</button><span className="reroll-count" aria-hidden="true">{String(rerolls).padStart(2, '0')}</span></div></div><div className="card-choice-footer"><span>자동 선택까지 {Math.max(0, Math.ceil(remaining ?? 20))}초</span><button className="primary-button" disabled={!highlighted} onClick={onApply}>카드 적용</button></div></>}
       </section>
     </div>
   )

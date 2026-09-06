@@ -6,9 +6,10 @@ import { enqueueNotification } from '../notification'
 export const startRound = (state: GameStoreState, context: SimulationContext): GameStoreState => {
   const definition = context.config.roundDefinition(state.run.round.number)
   let run = { ...state.run, phase: 'combat' as const, round: { ...state.run.round, kind: definition.kind, remaining: definition.duration, started: true, total: definition.total }, pendingSpawns: definition.total }
-  if (definition.kind === 'boss') {
+  if (definition.kind === 'boss' && definition.bossId) {
     const id = run.entityCounters.enemy + 1
-    run = { ...run, pendingSpawns: 0, enemies: [...run.enemies, { id, definitionId: 'alpha', hp: context.config.enemies.alpha.hp, maxHp: context.config.enemies.alpha.hp, trackDistance: 0, travelledDistance: 0 }], entityCounters: { ...run.entityCounters, enemy: id } }
+    const boss = context.config.enemies[definition.bossId]
+    run = { ...run, pendingSpawns: 0, enemies: [...run.enemies, { id, definitionId: definition.bossId, hp: boss.hp, maxHp: boss.hp, trackDistance: 0, travelledDistance: 0 }], round: { ...run.round, spawned: 1 }, entityCounters: { ...run.entityCounters, enemy: id } }
   }
   return { ...state, run }
 }

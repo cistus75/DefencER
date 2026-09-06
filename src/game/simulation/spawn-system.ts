@@ -15,7 +15,7 @@ export const spawnEnemies = (run: RunState, context: SimulationContext, delta: n
     counter += 1
     const definitionId = run.round.number >= 5 && spawned % 5 === 0 ? 'fast' : 'normal'
     const definition = context.config.enemies[definitionId]
-    const hp = Math.round(definition.hp * (1 + 0.12 * (run.round.number - 1)))
+    const hp = Math.round(definition.hp * (1 + context.config.balance.normalHpGrowth * (run.round.number - 1)))
     enemies = [...enemies, { id: counter, definitionId, hp, maxHp: hp, trackDistance: 0, travelledDistance: 0 }]
   }
   return { ...run, enemies, pendingSpawns: pending, round: { ...run.round, spawnElapsed: elapsed, spawned }, entityCounters: { ...run.entityCounters, enemy: counter } }

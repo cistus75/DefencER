@@ -11,6 +11,7 @@ import { moveEnemies } from '../game/simulation/enemy-movement-system'
 import { moveProjectiles } from '../game/simulation/projectile-system'
 import { offerCards } from '../game/simulation/round-resolution-system'
 import { spawnEnemies } from '../game/simulation/spawn-system'
+import { roundDefinition } from '../game/domain/rules/round-rules'
 
 const unit = (overrides: Partial<UnitInstance> = {}): UnitInstance => ({
   id: 1,
@@ -187,50 +188,69 @@ describe('spawn·이동·타기팅·피해 명세', () => {
 })
 
 describe('카드·라운드·결과 명세', () => {
+  it('1~40 구간별 출현 수와 보스 라운드를 정의한다', () => {
+    expect([1, 9, 11, 19, 21, 29, 31, 39].map((round) => roundDefinition(round).total)).toEqual([5, 13, 15, 31, 34, 58, 62, 94])
+    expect([10, 20, 30, 40].map((round) => roundDefinition(round).bossId)).toEqual(['alpha', 'omega', 'gamma', 'wickeline'])
+  })
+
   it('선택한 규칙은 다시 나오지 않고 장착 가능 실험체가 없으면 아이템을 제외한다', () => {
     const run = createInitialState(12).run
     const offered = offerCards({ ...run, activeRuleEffects: ['outer-tactics'], units: [unit({ item: 'radar' })] }, simulationContext)
     expect(offered.cardOffer).not.toContain('outer-tactics')
-    expect(offered.cardOffer.every((card) => ['free-clone', 'inner-tactics'].includes(card))).toBe(true)
+    expect(offered.cardOffer).toHaveLength(3)
+    expect(offered.cardOffer.some((card) => ['cube-watch', 'radar', 'power-module'].includes(card))).toBe(false)
   })
 
-  it('리롤은 횟수를 차감하고 카드 적용은 round 6 전투로 전이한다', () => {
+  it('리롤은 횟수를 차감하고 카드 적용은 round 6 준비 단계로 전이한다', () => {
     const initial = createInitialState(12)
-    let state = { ...initial, run: offerCards({ ...initial.run, phase: 'combat', units: [unit()] }, simulationContext) }
+    let state = { ...initial, run: offerCards({ ...initial.run, phase: 'combat', round: { ...initial.run.round, number: 5 }, units: [unit()] }, simulationContext) }
+    expect(state.run.cardSelectionRemaining).toBe(20)
     state = gameReducer(state, { type: 'REROLL_CARDS' })
     expect(state.run.rerolls).toBe(2)
+    expect(state.run.cardSelectionRemaining).toBe(20)
     const rule = state.run.cardOffer.find((card) => ['free-clone', 'outer-tactics', 'inner-tactics'].includes(card))
     expect(rule).toBeDefined()
     state = gameReducer(state, { type: 'CHOOSE_CARD', cardId: rule! })
-    expect(state.run).toMatchObject({ phase: 'combat', round: { number: 6 }, cardOffer: [] })
+    expect(state.run).toMatchObject({ phase: 'ready', round: { number: 6, started: false }, cardOffer: [] })
   })
 
   it('아이템은 대상을 확정한 뒤 round 6으로 가며 다시 선택할 수 없다', () => {
     const initial = createInitialState(12)
-    let state: GameStoreState = { ...initial, run: { ...initial.run, phase: 'card-selection', units: [unit()], cardOffer: ['radar'] } }
+    let state: GameStoreState = { ...initial, run: { ...initial.run, phase: 'card-selection', round: { ...initial.run.round, number: 5 }, units: [unit()], cardOffer: ['radar'] } }
     state = gameReducer(state, { type: 'CHOOSE_CARD', cardId: 'radar' })
     expect(state.run.phase).toBe('item-targeting')
     state = gameReducer(state, { type: 'EQUIP_PENDING_ITEM', unitId: 1 })
-    expect(state.run).toMatchObject({ phase: 'combat', round: { number: 6 } })
+    expect(state.run).toMatchObject({ phase: 'ready', round: { number: 6 } })
     expect(state.run.units[0].item).toBe('radar')
   })
 
   it('자유 복제는 기존 무료권에 3회를 합산한다', () => {
     const initial = createInitialState(12)
-    const state: GameStoreState = { ...initial, run: { ...initial.run, phase: 'card-selection', freeCloneTickets: 2, cardOffer: ['free-clone'] } }
+    const state: GameStoreState = { ...initial, run: { ...initial.run, phase: 'card-selection', round: { ...initial.run.round, number: 5 }, freeCloneTickets: 2, cardOffer: ['free-clone'] } }
     const next = gameReducer(state, { type: 'CHOOSE_CARD', cardId: 'free-clone' })
 
-    expect(next.run).toMatchObject({ phase: 'combat', freeCloneTickets: 5, round: { number: 6 } })
+    expect(next.run).toMatchObject({ phase: 'ready', freeCloneTickets: 5, round: { number: 6 } })
   })
 
-  it('알파 처치와 timeout이 같은 step이면 승리하고 생존 시 timeout 패배한다', () => {
+  it('알파 처치가 timeout과 같은 step이면 카드 선택으로 가고 생존 시 패배한다', () => {
     const initial = createInitialState(1)
     const alpha = enemy({ definitionId: 'alpha', hp: 10, maxHp: 3200 })
     const boss = { ...initial.run, phase: 'combat' as const, round: { number: 10, kind: 'boss' as const, remaining: 1 / 60, started: true, spawnElapsed: 0, spawned: 1, total: 1 }, enemies: [alpha], pendingSpawns: 0 }
     const winning = gameReducer({ ...initial, run: { ...boss, projectiles: [{ id: 1, sourceId: 1, targetId: 1, kind: 'skill', damage: 10, speed: 900, delay: 0, position: pointOnTrack(0) }] } }, { type: 'TICK', delta: 1 / 60 })
-    expect(winning.run).toMatchObject({ phase: 'victory', result: 'alpha' })
+    expect(winning.run).toMatchObject({ phase: 'card-selection', round: { number: 10 }, rerolls: 4, cardSelectionRemaining: 20 })
+    const autoSelected = gameReducer(winning, { type: 'TICK', delta: 20 })
+    expect(autoSelected.run).toMatchObject({ phase: 'ready', round: { number: 11 } })
+    expect(autoSelected.run.cards).toHaveLength(1)
     const losing = gameReducer({ ...initial, run: boss }, { type: 'TICK', delta: 1 / 60 })
     expect(losing.run).toMatchObject({ phase: 'defeat', result: 'timeout' })
+  })
+
+  it('40라운드 위클라인 처치가 timeout과 같은 step이면 최종 승리한다', () => {
+    const initial = createInitialState(1)
+    const wickeline = enemy({ definitionId: 'wickeline', hp: 10, maxHp: 30000 })
+    const boss = { ...initial.run, phase: 'combat' as const, round: { number: 40, kind: 'boss' as const, remaining: 1 / 60, started: true, spawnElapsed: 0, spawned: 1, total: 1 }, enemies: [wickeline], pendingSpawns: 0 }
+    const winning = gameReducer({ ...initial, run: { ...boss, projectiles: [{ id: 1, sourceId: 1, targetId: 1, kind: 'skill', damage: 10, speed: 900, delay: 0, position: pointOnTrack(0) }] } }, { type: 'TICK', delta: 1 / 60 })
+    expect(winning.run).toMatchObject({ phase: 'victory', result: 'wickeline' })
   })
 
   it('reset은 런·알림·엔티티를 완전한 초기 상태로 되돌린다', () => {

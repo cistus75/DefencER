@@ -88,9 +88,9 @@ describe('명세 회귀', () => {
 
   it('결과 화면은 선택 카드와 런 요약을 모두 표시한다', () => {
     const initial = createInitialState(1).run
-    const run = { ...initial, phase: 'victory' as const, result: 'alpha' as const, cards: [{ cardId: 'outer-tactics' as const, round: 5 }] }
+    const run = { ...initial, phase: 'victory' as const, result: 'wickeline' as const, round: { ...initial.round, number: 40 }, cards: [{ cardId: 'outer-tactics' as const, round: 5 }] }
     render(<RunResultOverlay result={resultViewModel(run, simulationContext.config)} onReset={() => undefined} />)
-    expect(screen.getByRole('heading', { name: '실험 완료 / 알파 처치' })).toBeInTheDocument()
+    expect(screen.getByRole('heading', { name: '실험 완료 / 위클라인 처치' })).toBeInTheDocument()
     expect(screen.getByText('외곽 전술')).toBeInTheDocument()
     expect(screen.getByRole('button', { name: '새 런 시작' })).toHaveFocus()
     expect(fireEvent.keyDown(screen.getByRole('dialog'), { key: 'Tab' })).toBe(false)
@@ -121,7 +121,7 @@ describe('명세 회귀', () => {
     rerender(<TopStatusBar count={50} />)
     expect(screen.getByText('필드 적').closest('.stage-topbar')).toHaveClass('stage-topbar--danger')
   })
-  it('9라운드 종료 직후 10라운드 알파를 즉시 필드에 추가한다', () => {
+  it('9라운드 종료 후 10라운드 준비 단계에서 시작하면 알파를 추가한다', () => {
     const initial = createInitialState(11)
     const state = {
       ...initial,
@@ -133,10 +133,12 @@ describe('명세 회귀', () => {
       },
     }
 
-    const next = gameReducer(state, { type: 'TICK', delta: 1 / 60 })
+    const prepared = gameReducer(state, { type: 'TICK', delta: 1 / 60 })
+    const next = gameReducer(prepared, { type: 'START_ROUND' })
 
     expect(next.run.round.number).toBe(10)
     expect(next.run.round.remaining).toBe(60)
+    expect(next.run.phase).toBe('combat')
     expect(next.run.enemies).toEqual([
       expect.objectContaining({ definitionId: 'alpha', hp: 3200, maxHp: 3200 }),
     ])

@@ -5,7 +5,7 @@ import type { Phase } from '../game/domain/common'
 const fixedStep = 1 / 60
 
 export const useGameLoop = (phase: Phase, dispatch: (action: GameAction) => void) => useEffect(() => {
-  if (phase !== 'combat') return
+  if (phase !== 'combat' && phase !== 'card-selection' && phase !== 'item-targeting') return
   let frame = 0
   let last = performance.now()
   let accumulator = 0

@@ -2,7 +2,7 @@ import { effectiveRange } from '../../domain/rules/stat-rules'
 import type { SkillHandler } from './skill-handler'
 import { inactiveSkill } from './skill-handler'
 
-const supportRatioByStar = [0, 0.2, 0.24, 0.28, 0.32, 0.468]
+const supportRatioByStar = [0, 0.2, 0.36, 0.55, 0.7, 0.8]
 
 export const leniSkill: SkillHandler = (input) => {
   const sourcePoint = input.context.config.battlefield.slotCenter(input.unit.slot)

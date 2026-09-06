@@ -16,7 +16,7 @@ export const actUnits = (run: RunState, context: SimulationContext): RunState =>
     if (unit.actionLock > 0) continue
     const definition = context.config.units[unit.definitionId]
     const origin = context.config.battlefield.slotCenter(unit.slot)
-    const target = chooseTarget(run.enemies, origin, effectiveRange(definition, unit.item), (candidate) => context.config.battlefield.pointOnTrack(candidate.trackDistance), context.config.balance.rangePixels)
+    const target = chooseTarget(run.enemies, origin, effectiveRange(definition, unit.item, run.activeRuleEffects), (candidate) => context.config.battlefield.pointOnTrack(candidate.trackDistance), context.config.balance.rangePixels)
     const attack = effectiveAttack(definition, unit.star, unit.item, run.activeRuleEffects, unit.slot)
 
     if (unit.skillCooldown === 0) {
@@ -36,7 +36,7 @@ export const actUnits = (run: RunState, context: SimulationContext): RunState =>
     if (target && unit.attackCooldown === 0) {
       projectileCounter += 1
       projectiles.push({ id: projectileCounter, sourceId: unit.id, targetId: target.id, kind: 'basic', damage: attack, speed: definition.projectileSpeed, delay: 0, position: origin })
-      units[unitIndex] = { ...unit, attackCooldown: 1 / effectiveAps(definition, unit.item) }
+      units[unitIndex] = { ...unit, attackCooldown: 1 / effectiveAps(definition, unit.item, run.activeRuleEffects) }
     }
   }
   return { ...run, units, projectiles, randomSeed, entityCounters: { ...run.entityCounters, projectile: projectileCounter } }

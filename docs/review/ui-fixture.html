@@ -1,0 +1,43 @@
+<!doctype html>
+<html lang="ko">
+<head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><title>DefencER review fixture</title></head>
+<body>
+<div id="root"></div>
+<script type="module">
+  // Development-only fixture: real GameScreen/reducer, deliberately injected states.
+  // ?mode=cards|target|result|empty ; &timer=1 enables the real game loop.
+  import React from 'react'
+  import { createRoot } from 'react-dom/client'
+  import { GameContext } from '/src/app/game-context.ts'
+  import { useGameLoop } from '/src/app/useGameLoop.ts'
+  import { GameScreen } from '/src/ui/GameScreen.tsx'
+  import { createInitialState } from '/src/game/application/create-initial-state.ts'
+  import { createGameReducer } from '/src/game/application/game-reducer.ts'
+  import { defaultGameConfig as config } from '/src/game/config/default-game-config.ts'
+  import { seededRandomGenerator as random } from '/src/game/infrastructure/seeded-random-generator.ts'
+  import '/src/styles.css'
+  const query = new URLSearchParams(location.search)
+  const mode = query.get('mode') || 'cards'
+  const initial = createInitialState(314159)
+  const history = ['radar', 'cube-watch', 'power-module', 'radar', 'cube-watch', 'power-module', 'radar']
+  initial.run = {
+    ...initial.run,
+    phase: mode === 'result' ? 'victory' : mode === 'target' ? 'item-targeting' : 'card-selection',
+    round: { ...initial.run.round, number: mode === 'result' ? 40 : 35, remaining: 0 },
+    units: ['rio', 'hyunwoo', 'adina', 'leni'].map((definitionId, index) => ({ id: index + 1, definitionId, slot: index, star: 2, skillCooldown: 4, attackCooldown: 0, actionLock: 0, marks: [], ...(index === 0 ? { item: 'radar' } : {}) })),
+    cards: history.slice(0, mode === 'result' ? 7 : 6).map((cardId, index) => ({ cardId, round: (index + 1) * 5, unitId: index === 0 ? 1 : index + 10 })),
+    cardOffer: mode === 'empty' ? [] : ['radar', 'cube-watch', 'power-module'],
+    pendingCard: mode === 'target' ? 'power-module' : undefined,
+    cardSelectionRemaining: 20,
+    result: mode === 'result' ? 'wickeline' : undefined,
+  }
+  const reducer = createGameReducer({ config, random })
+  function Fixture() {
+    const [state, dispatch] = React.useReducer(reducer, initial)
+    useGameLoop(query.has('timer') ? state.run.phase : 'ready', dispatch)
+    return React.createElement(GameContext.Provider, { value: { state, dispatch, config } }, React.createElement(GameScreen))
+  }
+  createRoot(document.getElementById('root')).render(React.createElement(Fixture))
+</script>
+</body>
+</html>

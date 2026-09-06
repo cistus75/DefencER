@@ -1,0 +1,95 @@
+
+> defencer@0.1.0 test:balance
+> vitest run src/test/balance-harness.test.ts --disableConsoleIntercept
+
+
+ RUN  v4.1.11 /Users/cistus75/Desktop/project/DefencER
+
+┌─────────┬─────────────────────────┬───────┬──────┬─────────┬──────────┬─────────┬────────────────┬───────────────────┬────────────────┬──────────────┬────────────┬───────────────────┐
+│ (index) │ policy                  │ seeds │ wins │ winRate │ overflow │ timeout │ averageSeconds │ averageWinSeconds │ averageCredits │ averageUnits │ maxEnemies │ averageFinalRound │
+├─────────┼─────────────────────────┼───────┼──────┼─────────┼──────────┼─────────┼────────────────┼───────────────────┼────────────────┼──────────────┼────────────┼───────────────────┤
+│ 0       │ 'initial-four-only'     │ 64    │ 0    │ '0%'    │ 11       │ 53      │ 354            │ 0                 │ 1865           │ 4            │ 50         │ 11                │
+│ 1       │ 'auto-spend'            │ 64    │ 0    │ '0%'    │ 64       │ 0       │ 677            │ 0                 │ 5427           │ 20           │ 50         │ 23.4              │
+│ 2       │ 'auto-merge'            │ 64    │ 0    │ '0%'    │ 61       │ 3       │ 774            │ 0                 │ 224            │ 8.9          │ 50         │ 27.2              │
+│ 3       │ 'auto-merge-first-card' │ 64    │ 0    │ '0%'    │ 64       │ 0       │ 721            │ 0                 │ 204            │ 9            │ 50         │ 25.2              │
+│ 4       │ 'strategic'             │ 64    │ 21   │ '33%'   │ 43       │ 0       │ 1082           │ 1173              │ 379            │ 16           │ 50         │ 37.7              │
+└─────────┴─────────────────────────┴───────┴──────┴─────────┴──────────┴─────────┴────────────────┴───────────────────┴────────────────┴──────────────┴────────────┴───────────────────┘
+┌─────────┬───────────┬───────┬───────┬──────┬─────────┐
+│ (index) │ unit      │ count │ seeds │ wins │ winRate │
+├─────────┼───────────┼───────┼───────┼──────┼─────────┤
+│ 0       │ 'hyunwoo' │ 0     │ 25    │ 8    │ '32%'   │
+│ 1       │ 'hyunwoo' │ 1     │ 20    │ 6    │ '30%'   │
+│ 2       │ 'hyunwoo' │ 2     │ 12    │ 6    │ '50%'   │
+│ 3       │ 'hyunwoo' │ 3     │ 7     │ 1    │ '14%'   │
+│ 4       │ 'rio'     │ 0     │ 25    │ 7    │ '28%'   │
+│ 5       │ 'rio'     │ 1     │ 26    │ 8    │ '31%'   │
+│ 6       │ 'rio'     │ 2     │ 11    │ 5    │ '45%'   │
+│ 7       │ 'rio'     │ 3     │ 2     │ 1    │ '50%'   │
+│ 8       │ 'adina'   │ 0     │ 19    │ 6    │ '32%'   │
+│ 9       │ 'adina'   │ 1     │ 28    │ 11   │ '39%'   │
+│ 10      │ 'adina'   │ 2     │ 15    │ 3    │ '20%'   │
+│ 11      │ 'adina'   │ 3     │ 1     │ 1    │ '100%'  │
+│ 12      │ 'adina'   │ 4     │ 1     │ 0    │ '0%'    │
+│ 13      │ 'leni'    │ 0     │ 18    │ 4    │ '22%'   │
+│ 14      │ 'leni'    │ 1     │ 29    │ 14   │ '48%'   │
+│ 15      │ 'leni'    │ 2     │ 10    │ 1    │ '10%'   │
+│ 16      │ 'leni'    │ 3     │ 5     │ 2    │ '40%'   │
+│ 17      │ 'leni'    │ 4     │ 2     │ 0    │ '0%'    │
+└─────────┴───────────┴───────┴───────┴──────┴─────────┘
+┌─────────┬──────────────┬───────────────┬───────┐
+│ (index) │ policy       │ failure       │ seeds │
+├─────────┼──────────────┼───────────────┼───────┤
+│ 0       │ 'auto-spend' │ '24-overflow' │ 26    │
+│ 1       │ 'auto-spend' │ '23-overflow' │ 23    │
+│ 2       │ 'auto-spend' │ '25-overflow' │ 10    │
+│ 3       │ 'auto-spend' │ '18-overflow' │ 2     │
+│ 4       │ 'auto-spend' │ '22-overflow' │ 2     │
+│ 5       │ 'auto-spend' │ '17-overflow' │ 1     │
+│ 6       │ 'auto-merge' │ '28-overflow' │ 7     │
+│ 7       │ 'auto-merge' │ '29-overflow' │ 7     │
+│ 8       │ 'auto-merge' │ '25-overflow' │ 7     │
+│ 9       │ 'auto-merge' │ '24-overflow' │ 6     │
+│ 10      │ 'auto-merge' │ '32-overflow' │ 6     │
+│ 11      │ 'auto-merge' │ '23-overflow' │ 5     │
+│ 12      │ 'auto-merge' │ '33-overflow' │ 5     │
+│ 13      │ 'auto-merge' │ '27-overflow' │ 4     │
+│ 14      │ 'auto-merge' │ '35-overflow' │ 3     │
+│ 15      │ 'auto-merge' │ '22-overflow' │ 2     │
+│ 16      │ 'auto-merge' │ '20-timeout'  │ 2     │
+│ 17      │ 'auto-merge' │ '26-overflow' │ 2     │
+│ 18      │ 'auto-merge' │ '34-overflow' │ 2     │
+│ 19      │ 'auto-merge' │ '38-overflow' │ 1     │
+│ 20      │ 'auto-merge' │ '19-overflow' │ 1     │
+│ 21      │ 'auto-merge' │ '10-timeout'  │ 1     │
+│ 22      │ 'auto-merge' │ '36-overflow' │ 1     │
+│ 23      │ 'auto-merge' │ '18-overflow' │ 1     │
+│ 24      │ 'auto-merge' │ '15-overflow' │ 1     │
+│ 25      │ 'strategic'  │ '38-overflow' │ 11    │
+│ 26      │ 'strategic'  │ '36-overflow' │ 8     │
+│ 27      │ 'strategic'  │ '39-overflow' │ 7     │
+│ 28      │ 'strategic'  │ '37-overflow' │ 6     │
+│ 29      │ 'strategic'  │ '35-overflow' │ 4     │
+│ 30      │ 'strategic'  │ '34-overflow' │ 3     │
+│ 31      │ 'strategic'  │ '33-overflow' │ 2     │
+│ 32      │ 'strategic'  │ '32-overflow' │ 1     │
+│ 33      │ 'strategic'  │ '31-overflow' │ 1     │
+└─────────┴──────────────┴───────────────┴───────┘
+┌─────────┬─────────────────────┬──────────┬───────────────┬─────────┐
+│ (index) │ card                │ selected │ selectionRate │ winRate │
+├─────────┼─────────────────────┼──────────┼───────────────┼─────────┤
+│ 0       │ 'concentrated-fire' │ 63       │ '98%'         │ '33%'   │
+│ 1       │ 'rapid-cycle'       │ 60       │ '94%'         │ '35%'   │
+│ 2       │ 'extended-sensors'  │ 18       │ '28%'         │ '28%'   │
+│ 3       │ 'outer-tactics'     │ 38       │ '59%'         │ '45%'   │
+│ 4       │ 'inner-tactics'     │ 26       │ '41%'         │ '15%'   │
+│ 5       │ 'free-clone'        │ 62       │ '97%'         │ '34%'   │
+│ 6       │ 'power-module'      │ 58       │ '91%'         │ '34%'   │
+│ 7       │ 'cube-watch'        │ 47       │ '73%'         │ '32%'   │
+│ 8       │ 'radar'             │ 0        │ '0%'          │ '-'     │
+└─────────┴─────────────────────┴──────────┴───────────────┴─────────┘
+
+ Test Files  1 passed (1)
+      Tests  1 passed (1)
+   Start at  01:32:26
+   Duration  75.30s (transform 62ms, setup 42ms, import 60ms, tests 74.95s, environment 193ms)
+
